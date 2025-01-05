@@ -1,4 +1,5 @@
 import GoogleLogin from "react-google-login";
+import "./Login.css";
 
 const Login = () => {
   const onSuccess = (response: any) => {
@@ -12,16 +13,21 @@ const Login = () => {
   };
 
   return (
-    <div style={{ textAlign: "center", marginTop: "100px" }}>
-      <h1>ログイン / 新規登録</h1>
-      <p>以下のボタンを使ってGoogleアカウントでログインしてください。</p>
-      <GoogleLogin
-        clientId="あなたのクライアントIDをここに挿入してください"
-        buttonText="Googleで登録"
-        onSuccess={onSuccess}
-        onFailure={onFailure}
-        cookiePolicy={"single_host_origin"}
-      />
+    <div className="login-container">
+      <div className="login-card">
+        <h1 className="login-title">
+          ログイン / 新規登録
+        </h1>
+        <div className="google-login-wrapper">
+          <GoogleLogin
+            clientId="あなたのクライアントIDをここに挿入してください"
+            buttonText="Googleで登録"
+            onSuccess={onSuccess}
+            onFailure={onFailure}
+            cookiePolicy={"single_host_origin"}
+          />
+        </div>
+      </div>
     </div>
   );
 };

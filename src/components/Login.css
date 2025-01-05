@@ -1,0 +1,68 @@
+/* 背景全体の設定 */
+html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #121212; /* ダークモードの背景色 */
+    font-family: Arial, sans-serif;
+  }
+  
+  .login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; /* ビューポート全体をカバー */
+    width: 100vw; /* ビューポート全体をカバー */
+    background-color: #121212; /* ダークモード背景 */
+    color: #ffffff;
+    box-sizing: border-box;
+  }
+  
+  /* カードのスタイル（大きさを変更） */
+  .login-card {
+    width: 100%;
+    max-width: 500px; /* カードの最大幅を広げる */
+    background-color: #1f1f1f; /* ダークモードのカード背景 */
+    padding: 3rem; /* パディングを大きくして中身の余白を増やす */
+    border-radius: 12px; /* 角丸を少し大きく */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4); /* ダークモードに合うシャドウ */
+    text-align: center;
+    box-sizing: border-box;
+  }
+  
+  /* ログイン・新規登録のタイトルを横並びに、文字を大きく */
+  .login-title {
+    display: inline; /* テキストを横一列に並べる */
+    font-size: 36px; /* 文字サイズを大きく */
+    margin-bottom: 2rem; /* タイトルとボタンの間隔を広げる */
+  }
+  
+  /* GoogleLoginボタンのラッパー */
+  .google-login-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 1rem;
+  }
+  
+  /* Googleログインボタンのスタイル（ボタンの大きさを調整） */
+  .google-login-btn {
+    width: 100%; /* ボタンをカード幅に合わせて広げる */
+    padding: 15px; /* ボタンのパディングを大きく */
+    background-color: #4285f4;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px; /* ボタン文字の大きさを変更 */
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .google-login-btn:hover {
+    background-color: #357ae8;
+  }
+  
+  .google-login-btn:focus {
+    outline: none;
+  }
+  
