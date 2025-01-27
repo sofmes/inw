@@ -27,7 +27,7 @@ html, body {
 
 /* ノード（円）のスタイル */
 .node {
-  fill: orange; /* 通常のノードの色 */
+  fill: lightblue; /* 通常のノードの色 */
   transition: fill 0.3s ease; /* マウスオーバー時の色の遷移 */
 }
 

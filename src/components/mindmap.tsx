@@ -76,7 +76,7 @@ const MindMap: React.FC = () => {
       .attr('cx', (d) => d.x ?? 0)
       .attr('cy', (d) => d.y ?? 0)
       .attr('r', (d) => (d === mainNode ? 30 : 15))
-      .attr('fill', (d) => (d === mainNode ? 'lightblue' : 'orange'));
+      .attr('fill', 'lightblue'); // すべてのノードを水色に変更
 
     // ラベル（名前）を描画
     g.selectAll('text')
