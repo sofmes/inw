@@ -4,8 +4,8 @@ import { createRoot } from 'react-dom/client';
 
 import './globals.css';
 import './components/mindmap.css';
-import MindMap from './components/mindmap';
 import Header from './components/Header';
+import MindMap from './components/Mindmap';
 
 
 
