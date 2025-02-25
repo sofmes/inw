@@ -1,10 +1,10 @@
-import { SigmaContainer } from "@react-sigma/core";
-import { useWorkerLayoutForce } from "@react-sigma/layout-force";
-import { MultiDirectedGraph } from "graphology";
-import { useEffect } from "react";
-import type { NodeHoverDrawingFunction } from "sigma/rendering";
-import { Idea, Tag } from "../libs/model";
-import AddIdeaButton from "./AddIdeaButton";
+import { SigmaContainer } from '@react-sigma/core';
+import { useWorkerLayoutForce } from '@react-sigma/layout-force';
+import { MultiDirectedGraph } from 'graphology';
+import { useEffect } from 'react';
+import type { NodeHoverDrawingFunction } from 'sigma/rendering';
+import { Idea, Tag } from '../libs/model';
+import AddIdeaButton from './AddIdeaButton';
 
 class MindMapController {
 	graph: MultiDirectedGraph;
@@ -21,22 +21,22 @@ class MindMapController {
 		let prefix = null;
 
 		if (obj instanceof Idea) {
-			prefix = "idea";
+			prefix = 'idea';
 		}
 
 		if (obj instanceof Tag) {
-			prefix = "tag";
+			prefix = 'tag';
 		}
 
 		if (obj) return `${prefix}-${obj.id}`;
 
-		throw new Error("指定されたオブジェクトにはID生成に対応していません。");
+		throw new Error('指定されたオブジェクトにはID生成に対応していません。');
 	}
 
 	addIdea(idea: Idea) {
 		this.ideas.set(idea.id, idea);
 
-		const tags = idea.tags.map((tag) => `#${tag}`).join(" ");
+		const tags = idea.tags.map(tag => `#${tag}`).join(' ');
 		this.graph.addNode(idea.node, {
 			label: `${idea.name}\n${tags}`,
 			size: 50,
@@ -96,10 +96,10 @@ function Force() {
 function MindMap() {
 	const controller = new MindMapController();
 
-	controller.addTagAndIdeas(new Tag("ブルーアーカイブ", 1), [
-		new Idea("天使の輪っか 変える", 1, [], "天使の輪っかの説明"),
-		new Idea("テスト2", 2, [], "テスト2の説明"),
-		new Idea("テスト3", 3, [], "テスト3の説明"),
+	controller.addTagAndIdeas(new Tag('ブルーアーカイブ', 1), [
+		new Idea('天使の輪っか 変える', 1, [], '天使の輪っかの説明'),
+		new Idea('テスト2', 2, [], 'テスト2の説明'),
+		new Idea('テスト3', 3, [], 'テスト3の説明'),
 	]);
 
 	const defaultDrawNodeHover: NodeHoverDrawingFunction = (
@@ -112,8 +112,11 @@ function MindMap() {
 		<div>
 			<SigmaContainer
 				graph={controller.graph}
-				style={{ width: "100%", height: "100vh" }}
-				settings={{ labelColor: { color: "white" }, defaultDrawNodeHover }}
+				style={{ width: '100%', height: '100vh' }}
+				settings={{
+					labelColor: { color: 'white' },
+					defaultDrawNodeHover,
+				}}
 			>
 				<Force />
 			</SigmaContainer>

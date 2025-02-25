@@ -7,13 +7,11 @@ import './components/mindmap.css';
 import Header from './components/Header';
 import MindMap from './components/Mindmap';
 
-
-
 const root = createRoot(document.getElementById('root')!);
 
 root.render(
-  <StrictMode>
-    <Header />
-    <MindMap />
-  </StrictMode>
+	<StrictMode>
+		<Header />
+		<MindMap />
+	</StrictMode>,
 );
