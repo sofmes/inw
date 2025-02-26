@@ -1,5 +1,6 @@
 export abstract class Nodeable {
 	abstract get node(): string;
+	abstract get label(): string;
 }
 
 export class Tag extends Nodeable {
@@ -12,6 +13,10 @@ export class Tag extends Nodeable {
 
 	override get node() {
 		return `tag-${this.id}`;
+	}
+
+	override get label() {
+		return this.name;
 	}
 }
 
@@ -27,5 +32,9 @@ export class Idea extends Nodeable {
 
 	override get node() {
 		return `idea-${this.id}`;
+	}
+
+	override get label() {
+		return this.name;
 	}
 }
