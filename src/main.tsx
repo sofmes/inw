@@ -4,14 +4,12 @@ import { createRoot } from 'react-dom/client';
 
 import './globals.css';
 import './components/mindmap.css';
-import Header from './components/Header';
-import MindMap from './components/Mindmap';
+import { App } from './App';
 
 const root = createRoot(document.getElementById('root')!);
 
 root.render(
 	<StrictMode>
-		<Header />
-		<MindMap />
+		<App />
 	</StrictMode>,
 );

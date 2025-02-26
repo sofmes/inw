@@ -33,17 +33,49 @@ export class StyleStrategy {
 	}
 }
 
-export class MindMapGraph {
+class Objects {
+	constructor(
+		readonly ideas: Map<string, Idea>,
+		readonly tags: Map<string, Tag>,
+	) {}
+
+	set(obj: Nodeable) {
+		if (obj instanceof Idea) {
+			this.ideas.set(obj.node, obj);
+		} else if (obj instanceof Tag) {
+			this.tags.set(obj.node, obj);
+		} else {
+			throw new Error(
+				'指定されたオブジェクトの格納には対応していません。',
+			);
+		}
+	}
+
+	getIdea(key: string): Idea | undefined {
+		return this.ideas.get(key);
+	}
+
+	getTag(key: string): Tag | undefined {
+		return this.tags.get(key);
+	}
+}
+
+export class MindMapState {
+	public readonly objs: Objects;
+
 	constructor(
 		readonly graph: MultiDirectedGraph,
 		readonly style: StyleStrategy,
-	) {}
+	) {
+		this.objs = new Objects(new Map(), new Map());
+	}
 
 	addNode(obj: Nodeable) {
 		if (this.graph.hasNode(obj.node)) {
 			return;
 		}
 
+		this.objs.set(obj);
 		this.graph.addNode(obj.node, {
 			label: obj.label,
 			size: 50,
