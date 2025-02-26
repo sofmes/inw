@@ -17,22 +17,6 @@ class MindMapController {
 		this.tags = new Map();
 	}
 
-	makeNodeName(obj: Idea | Tag): string {
-		let prefix = null;
-
-		if (obj instanceof Idea) {
-			prefix = 'idea';
-		}
-
-		if (obj instanceof Tag) {
-			prefix = 'tag';
-		}
-
-		if (obj) return `${prefix}-${obj.id}`;
-
-		throw new Error('指定されたオブジェクトにはID生成に対応していません。');
-	}
-
 	addIdea(idea: Idea) {
 		this.ideas.set(idea.id, idea);
 
@@ -103,9 +87,9 @@ function MindMap() {
 	]);
 
 	const defaultDrawNodeHover: NodeHoverDrawingFunction = (
-		ctx,
-		data,
-		settings,
+		_ctx,
+		_data,
+		_settings,
 	) => {};
 
 	return (
