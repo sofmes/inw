@@ -6,6 +6,11 @@ import type { NodeHoverDrawingFunction } from 'sigma/rendering';
 import { Idea, Tag } from '../libs/model';
 import AddIdeaButton from './AddIdeaButton';
 
+const COLORS = {
+	tag: '#698aab',
+	idea: '#887f7a',
+};
+
 class MindMapController {
 	graph: MultiDirectedGraph;
 	private ideas: Map<number, Idea>;
@@ -17,45 +22,44 @@ class MindMapController {
 		this.tags = new Map();
 	}
 
-	addIdea(idea: Idea) {
+	private addIdea(idea: Idea) {
 		this.ideas.set(idea.id, idea);
 
-		const tags = idea.tags.map(tag => `#${tag}`).join(' ');
+		const tags = idea.tags.map(tag => `#${tag.name}`).join(' ');
 		this.graph.addNode(idea.node, {
 			label: `${idea.name}\n${tags}`,
 			size: 50,
+			color: COLORS.idea,
 			x: Math.random() * 10,
 			y: Math.random() * 10,
 		});
+
+		for (const tag of idea.tags) {
+			this.addTag(tag);
+			this.graph.addDirectedEdge(idea.node, tag.node);
+		}
 	}
 
-	removeIdea(idea: Idea) {
-		this.ideas.delete(idea.id);
-		this.graph.dropNode(idea.node);
-	}
-
-	addTag(tag: Tag) {
+	private addTag(tag: Tag) {
 		this.tags.set(tag.id, tag);
 
 		this.graph.addNode(tag.node, {
 			label: `#${tag.name}`,
 			size: 50,
+			color: COLORS.tag,
 			x: Math.random() * 10,
 			y: Math.random() * 10,
 		});
 	}
 
-	removeTag(tag: Tag) {
-		this.tags.delete(tag.id);
-		this.graph.dropNode(tag.node);
-	}
-
 	/** 指定されたタグとそのタグが付いたアイデアをマインドマップに追加する。 */
 	addTagAndIdeas(tag: Tag, ideas: Idea[]) {
-		this.addTag(tag);
+		if (!this.tags.has(tag.id)) {
+			this.addTag(tag);
+		}
 
 		for (const idea of ideas) {
-			this.addIdea(idea);
+			if (!this.ideas.has(idea.id)) this.addIdea(idea);
 			this.graph.addDirectedEdge(tag.node, idea.node);
 		}
 	}
@@ -81,16 +85,15 @@ function MindMap() {
 	const controller = new MindMapController();
 
 	controller.addTagAndIdeas(new Tag('ブルーアーカイブ', 1), [
-		new Idea('天使の輪っか 変える', 1, [], '天使の輪っかの説明'),
+		new Idea(
+			'天使の輪っか 変える',
+			1,
+			[new Tag('天使', 2)],
+			'天使の輪っかの説明',
+		),
 		new Idea('テスト2', 2, [], 'テスト2の説明'),
 		new Idea('テスト3', 3, [], 'テスト3の説明'),
 	]);
-
-	const defaultDrawNodeHover: NodeHoverDrawingFunction = (
-		_ctx,
-		_data,
-		_settings,
-	) => {};
 
 	return (
 		<div>
@@ -98,8 +101,7 @@ function MindMap() {
 				graph={controller.graph}
 				style={{ width: '100%', height: '100vh' }}
 				settings={{
-					labelColor: { color: 'white' },
-					defaultDrawNodeHover,
+					labelColor: { color: '#999999' },
 				}}
 			>
 				<Force />
