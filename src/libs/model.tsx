@@ -20,6 +20,23 @@ export class Tag extends Nodeable {
 	}
 }
 
+export class User extends Nodeable {
+	constructor(
+		public name: string,
+		public readonly id: number,
+	) {
+		super();
+	}
+
+	override get node() {
+		return `user-${this.id}`;
+	}
+
+	override get label() {
+		return this.name;
+	}
+}
+
 export class Idea extends Nodeable {
 	constructor(
 		public name: string,

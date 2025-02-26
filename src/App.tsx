@@ -1,13 +1,16 @@
 import Header from './components/Header';
 import { MindMap } from './components/MindMap';
-import { Idea, Tag } from './libs/model';
+import { Idea, Tag, User } from './libs/model';
 
 export function App() {
+	//const root = new User('ユーザーテスト', 1);
+	const root = new Tag('ブルーアーカイブ', 1);
+
 	return (
 		<div className='App'>
 			<Header />
 			<MindMap
-				tag={new Tag('ブルーアーカイブ', 1)}
+				root={root}
 				ideas={[
 					new Idea(
 						'天使の輪っか 変える',
