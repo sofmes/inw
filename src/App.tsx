@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { RootItemContext } from './components/Context.tsx';
+import { RootItemContext, SelectedItemContext } from './components/Context.tsx';
 import Header from './components/Header';
-import { MindMap } from './components/MindMap';
+import { MindMap } from './components/mindmap.tsx';
 import { Idea, type Nodeable, type Root, Tag } from './libs/model';
 
 export function App() {
@@ -19,6 +19,12 @@ export function App() {
 		<div className='App'>
 			<Header />
 			<RootItemContext.Provider value={[rootItem, setRootItem]}>
+				<SelectedItemContext.Provider
+					value={[selectedItem, setSelectedItem]}
+				>
+					選択されたもの：{selectedItem ? selectedItem.label : 'null'}
+				</SelectedItemContext.Provider>
+
 				{rootItem ? (
 					<MindMap
 						root={rootItem}
