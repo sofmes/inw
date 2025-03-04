@@ -55,3 +55,5 @@ export class Idea extends Nodeable {
 		return this.name;
 	}
 }
+
+export type Root = Tag | User;

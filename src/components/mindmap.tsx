@@ -1,9 +1,9 @@
 import { SigmaContainer, useRegisterEvents } from '@react-sigma/core';
 import { useWorkerLayoutForce } from '@react-sigma/layout-force';
 import { MultiDirectedGraph } from 'graphology';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import { MindMapState, StyleStrategy } from '../libs/graph';
-import { Idea, type Tag, type User } from '../libs/model';
+import { Idea, type Nodeable, type Tag, type User } from '../libs/model';
 import AddIdeaButton from './AddIdeaButton';
 
 function Force() {
@@ -22,7 +22,13 @@ function Force() {
 	return null;
 }
 
-function GraphEvents({ state }: { state: MindMapState }) {
+type OnSelectFn = (obj: Nodeable) => void;
+interface GraphEventsProps {
+	state: MindMapState;
+	onSelect: OnSelectFn;
+}
+
+function GraphEvents({ state, onSelect }: GraphEventsProps) {
 	const registerEvents = useRegisterEvents();
 
 	useEffect(() => {
@@ -30,20 +36,18 @@ function GraphEvents({ state }: { state: MindMapState }) {
 			clickNode: payload => {
 				const tag = state.objs.getTag(payload.node);
 				if (tag) {
-					console.log(
-						state.expandDeep(tag, [
-							new Idea('派生アイデア', 10, [], ''),
-							new Idea('派生アイデア2', 11, [], ''),
-							new Idea('派生アイデア3', 12, [], ''),
-						]),
-					);
+					state.expandDeep(tag, [
+						new Idea('派生アイデア', 10, [], ''),
+						new Idea('派生アイデア2', 11, [], ''),
+						new Idea('派生アイデア3', 12, [], ''),
+					]);
+					onSelect(tag);
 				}
 
 				const idea = state.objs.getIdea(payload.node);
-				if (!idea) return;
-
-				// アイデア選択
-				console.log(idea);
+				if (idea) {
+					onSelect(idea);
+				}
 			},
 		});
 	}, [registerEvents]);
@@ -51,13 +55,23 @@ function GraphEvents({ state }: { state: MindMapState }) {
 	return null;
 }
 
-export function MindMap(props: { root: Tag | User; ideas: Idea[] }) {
-	const state = new MindMapState(
-		new MultiDirectedGraph(),
-		new StyleStrategy(),
-	);
+export interface MindMapProps {
+	root: Tag | User;
+	onSelect: OnSelectFn;
+	ideas: Idea[];
+}
 
-	state.expandDeep(props.root, props.ideas);
+export function MindMap(props: MindMapProps) {
+	const state = useMemo(() => {
+		const state = new MindMapState(
+			new MultiDirectedGraph(),
+			new StyleStrategy(),
+		);
+
+		state.expandDeep(props.root, props.ideas);
+
+		return state;
+	}, [props.root]);
 
 	return (
 		<div>
@@ -69,7 +83,7 @@ export function MindMap(props: { root: Tag | User; ideas: Idea[] }) {
 				}}
 			>
 				<Force />
-				<GraphEvents state={state} />
+				<GraphEvents state={state} onSelect={props.onSelect} />
 			</SigmaContainer>
 			<AddIdeaButton /> {/* 右下のボタンを追加 */}
 		</div>

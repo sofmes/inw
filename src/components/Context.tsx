@@ -1,0 +1,10 @@
+import { createContext } from 'react';
+import type { Nodeable, Root } from '../libs/model';
+
+export const SelectedItemContext = createContext<
+	[Nodeable | null, (value: Nodeable) => void]
+>([null, _ => {}]);
+
+export const RootItemContext = createContext<
+	[Root | null, (value: Root) => void]
+>([null, _ => {}]);
