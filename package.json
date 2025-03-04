@@ -9,23 +9,20 @@
 		"lint": "biome lint .",
 		"preview": "vite preview"
 	},
-  "dependencies": {
-    "@react-oauth/google": "^0.12.1",
-    "@react-sigma/core": "^5.0.2",
-    "@react-sigma/layout-core": "^5.0.2",
-    "@react-sigma/layout-force": "^5.0.2",
-    "daisyui": "^4.12.23",
-    "graphology": "^0.26.0",
-    "graphology-layout-forceatlas2": "^0.10.1",
-    "graphology-types": "^0.24.8",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
-    "react-flow-renderer": "^10.3.17",
-    "react-google-login": "^5.2.2",
-    "react-icons": "^5.4.0",
-    "react-spring": "^9.7.5",
-    "sigma": "^3.0.1"
-  },
+	"dependencies": {
+		"@react-sigma/core": "^5.0.2",
+		"@react-sigma/layout-core": "^5.0.2",
+		"@react-sigma/layout-force": "^5.0.2",
+		"daisyui": "^4.12.23",
+		"graphology": "^0.26.0",
+		"graphology-layout-forceatlas2": "^0.10.1",
+		"graphology-types": "^0.24.8",
+		"react": "^18.3.1",
+		"react-dom": "^18.3.1",
+		"react-icons": "^5.4.0",
+		"react-spring": "^9.7.5",
+		"sigma": "^3.0.1"
+	},
 	"devDependencies": {
 		"@biomejs/biome": "1.9.4",
 		"@tailwindcss/postcss": "^4.0.0",
