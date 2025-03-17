@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { RootItemContext, SelectedItemContext } from './components/Context.tsx';
+import { Drawer } from './components/Drawer.tsx';
 import Header from './components/Header';
 import { MindMap } from './components/mindmap.tsx';
 import { Idea, type Nodeable, type Root, Tag } from './libs/model';
@@ -22,7 +23,7 @@ export function App() {
 				<SelectedItemContext.Provider
 					value={[selectedItem, setSelectedItem]}
 				>
-					選択されたもの：{selectedItem ? selectedItem.label : 'null'}
+					<Drawer />
 				</SelectedItemContext.Provider>
 
 				{rootItem ? (

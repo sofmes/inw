@@ -22,7 +22,7 @@ function Force() {
 	return null;
 }
 
-type OnSelectFn = (obj: Nodeable) => void;
+type OnSelectFn = (obj: Nodeable | null) => void;
 interface GraphEventsProps {
 	state: MindMapState;
 	onSelect: OnSelectFn;
@@ -33,6 +33,7 @@ function GraphEvents({ state, onSelect }: GraphEventsProps) {
 
 	useEffect(() => {
 		registerEvents({
+			clickStage: _ => onSelect(null),
 			clickNode: payload => {
 				const tag = state.objs.getTag(payload.node);
 				if (tag) {
