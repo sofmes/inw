@@ -1,8 +1,8 @@
 import type React from 'react';
 import { useState } from 'react';
-import IdeaForm from './IdeaForm';
+import { IdeaForm } from './IdeaForm';
 
-const AddIdeaButton: React.FC = () => {
+export const AddIdeaButton: React.FC = () => {
 	const [isOpen, setIsOpen] = useState(false);
 
 	return (
@@ -18,5 +18,3 @@ const AddIdeaButton: React.FC = () => {
 		</>
 	);
 };
-
-export default AddIdeaButton;

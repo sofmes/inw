@@ -4,7 +4,7 @@ import { MultiDirectedGraph } from 'graphology';
 import { useEffect, useMemo } from 'react';
 import { MindMapState, StyleStrategy } from '../libs/graph';
 import { Idea, type Nodeable, type Tag, type User } from '../libs/model';
-import AddIdeaButton from './AddIdeaButton';
+import { AddIdeaButton } from './AddIdeaButton';
 
 function Force() {
 	const { start, kill } = useWorkerLayoutForce({

@@ -1,7 +1,7 @@
 import GoogleLogin from 'react-google-login';
 import './Login.css';
 
-const Login = () => {
+export const Login = () => {
 	const onSuccess = (response: any) => {
 		console.log('ログイン成功！', response.profileObj);
 		alert(`ようこそ、${response.profileObj.name}さん！`);
@@ -29,5 +29,3 @@ const Login = () => {
 		</div>
 	);
 };
-
-export default Login;

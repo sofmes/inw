@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { HiOutlineSearch } from 'react-icons/hi';
 
-const SearchBar = () => {
+export const SearchBar = () => {
 	const [query, setQuery] = useState('');
 
 	const handleSearch = (e: React.FormEvent) => {
@@ -13,7 +13,7 @@ const SearchBar = () => {
 		<form onSubmit={handleSearch} className='w-72'>
 			<div
 				className='flex items-center bg-neutral-700 text-white rounded-full shadow-md px-4 py-1
-                  hover:bg-neutral-600 focus-within:ring-2 focus-within:ring-gray-400 transition'
+                    hover:bg-neutral-600 focus-within:ring-2 focus-within:ring-gray-400 transition'
 			>
 				<input
 					type='text'
@@ -28,5 +28,3 @@ const SearchBar = () => {
 		</form>
 	);
 };
-
-export default SearchBar;

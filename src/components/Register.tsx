@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import './Register.css';
 
-const Register = () => {
+export const Register = () => {
 	const [username, setUsername] = useState('');
 
 	const handleCreate = () => {
@@ -17,7 +17,7 @@ const Register = () => {
 			<div className='register-card'>
 				<h1>新規登録</h1>
 				<div className='icon-wrapper'>
-					<div className='photo-icon'></div>
+					<div className='photo-icon' />
 				</div>
 				<div className='input-wrapper'>
 					<label htmlFor='username'>ユーザー名</label>
@@ -36,5 +36,3 @@ const Register = () => {
 		</div>
 	);
 };
-
-export default Register;

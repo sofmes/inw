@@ -5,7 +5,7 @@ interface IdeaFormProps {
 	onClose: () => void;
 }
 
-const IdeaForm: React.FC<IdeaFormProps> = ({ isOpen, onClose }) => {
+export const IdeaForm: React.FC<IdeaFormProps> = ({ isOpen, onClose }) => {
 	return (
 		<div
 			className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50
@@ -13,35 +13,40 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ isOpen, onClose }) => {
 		>
 			<div
 				className={`bg-neutral-800 text-white p-8 rounded-2xl shadow-lg w-[600px]
-          transform transition-transform duration-300 ${isOpen ? 'scale-100' : 'scale-90 opacity-0'}`}
+                            transform transition-transform duration-300 ${isOpen ? 'scale-100' : 'scale-90 opacity-0'}`}
 			>
 				<h2 className='text-2xl font-bold mb-6'>アイデア投稿</h2>
 
-				{/* タイトル */}
-				<label className='block text-lg mb-2'>タイトル</label>
+				<label htmlFor='title' className='block text-lg mb-2'>
+					タイトル
+				</label>
 				<input
+					id='title'
 					type='text'
 					className='w-full p-2 bg-neutral-700 rounded-lg mb-4 text-lg'
 					placeholder='アイデアのタイトルを入力'
 				/>
 
-				{/* 説明 */}
-				<label className='block text-lg mb-2'>説明</label>
+				<label htmlFor='description' className='block text-lg mb-2'>
+					説明
+				</label>
 				<textarea
+					id='description'
 					className='w-full p-2 bg-neutral-700 rounded-lg mb-4 text-lg'
 					rows={4}
 					placeholder='アイデアの説明を入力'
-				></textarea>
+				/>
 
-				{/* タグ */}
-				<label className='block text-lg mb-2'>タグ</label>
+				<label htmlFor='tag' className='block text-lg mb-2'>
+					タグ
+				</label>
 				<input
+					id='tag'
 					type='text'
 					className='w-full p-2 bg-neutral-700 rounded-lg mb-6 text-lg'
 					placeholder='#タグを入力'
 				/>
 
-				{/* ボタン */}
 				<div className='flex justify-end gap-4'>
 					<button
 						onClick={onClose}
@@ -57,5 +62,3 @@ const IdeaForm: React.FC<IdeaFormProps> = ({ isOpen, onClose }) => {
 		</div>
 	);
 };
-
-export default IdeaForm;
