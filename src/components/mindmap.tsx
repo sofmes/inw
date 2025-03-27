@@ -3,7 +3,7 @@ import { useWorkerLayoutForce } from '@react-sigma/layout-force';
 import { MultiDirectedGraph } from 'graphology';
 import { useEffect, useMemo } from 'react';
 import { MindMapState, StyleStrategy } from '../libs/graph';
-import { Idea, type Nodeable, type Tag, type User } from '../libs/model';
+import { Idea, type Nodeable, type Tag, User } from '../libs/model';
 import { AddIdeaButton } from './AddIdeaButton';
 
 function Force() {
@@ -30,6 +30,11 @@ interface GraphEventsProps {
 
 function GraphEvents({ state, onSelect }: GraphEventsProps) {
 	const registerEvents = useRegisterEvents();
+	const testUser = new User(
+		'gaku sato',
+		1,
+		'https://lh3.googleusercontent.com/a/ACg8ocLuj4qT1J-p5BiCxXNefcJ9t6fBO7PyduCxUKB_4qtyXDXiUA=s128-b16-cc-rp-mo',
+	);
 
 	useEffect(() => {
 		registerEvents({
@@ -38,9 +43,9 @@ function GraphEvents({ state, onSelect }: GraphEventsProps) {
 				const tag = state.objs.getTag(payload.node);
 				if (tag) {
 					state.expandDeep(tag, [
-						new Idea('派生アイデア', 10, [], ''),
-						new Idea('派生アイデア2', 11, [], ''),
-						new Idea('派生アイデア3', 12, [], ''),
+						new Idea('派生アイデア', 10, [], '', testUser),
+						new Idea('派生アイデア2', 11, [], '', testUser),
+						new Idea('派生アイデア3', 12, [], '', testUser),
 					]);
 					onSelect(tag);
 				}

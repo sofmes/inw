@@ -24,6 +24,7 @@ export class User extends Nodeable {
 	constructor(
 		public name: string,
 		public readonly id: number,
+		public readonly photo: string,
 	) {
 		super();
 	}
@@ -43,6 +44,7 @@ export class Idea extends Nodeable {
 		public readonly id: number,
 		public tags: Tag[],
 		public description: string,
+		public author: User,
 	) {
 		super();
 	}
