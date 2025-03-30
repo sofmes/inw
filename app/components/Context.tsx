@@ -1,5 +1,5 @@
-import { createContext } from 'react';
-import type { Nodeable, Root } from '../libs/model';
+import { createContext } from "react";
+import type { Nodeable, Root } from "../../app/lib/model";
 
 export const SelectedItemContext = createContext<
 	[Nodeable | null, (value: Nodeable | null) => void]

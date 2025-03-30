@@ -1,10 +1,11 @@
-import { SigmaContainer, useRegisterEvents } from '@react-sigma/core';
-import { useWorkerLayoutForce } from '@react-sigma/layout-force';
-import { MultiDirectedGraph } from 'graphology';
-import { useEffect, useMemo } from 'react';
-import { MindMapState, StyleStrategy } from '../libs/graph';
-import { Idea, type Nodeable, type Tag, User } from '../libs/model';
-import { AddIdeaButton } from './AddIdeaButton';
+import { SigmaContainer, useRegisterEvents } from "@react-sigma/core";
+import { useWorkerLayoutForce } from "@react-sigma/layout-force";
+import { MultiDirectedGraph } from "graphology";
+import { useEffect, useMemo } from "react";
+import { MindMapState, StyleStrategy } from "../../app/lib/graph";
+import { Idea, type Nodeable, type Tag, User } from "../../app/lib/model";
+import { AddIdeaButton } from "./AddIdeaButton";
+import "./mindmap.css";
 
 function Force() {
 	const { start, kill } = useWorkerLayoutForce({
@@ -31,9 +32,9 @@ interface GraphEventsProps {
 function GraphEvents({ state, onSelect }: GraphEventsProps) {
 	const registerEvents = useRegisterEvents();
 	const testUser = new User(
-		'gaku sato',
+		"gaku sato",
 		1,
-		'https://lh3.googleusercontent.com/a/ACg8ocLuj4qT1J-p5BiCxXNefcJ9t6fBO7PyduCxUKB_4qtyXDXiUA=s128-b16-cc-rp-mo',
+		"https://lh3.googleusercontent.com/a/ACg8ocLuj4qT1J-p5BiCxXNefcJ9t6fBO7PyduCxUKB_4qtyXDXiUA=s128-b16-cc-rp-mo",
 	);
 
 	useEffect(() => {
@@ -43,9 +44,9 @@ function GraphEvents({ state, onSelect }: GraphEventsProps) {
 				const tag = state.objs.getTag(payload.node);
 				if (tag) {
 					state.expandDeep(tag, [
-						new Idea('派生アイデア', 10, [], '', testUser),
-						new Idea('派生アイデア2', 11, [], '', testUser),
-						new Idea('派生アイデア3', 12, [], '', testUser),
+						new Idea("派生アイデア", 10, [], "", testUser),
+						new Idea("派生アイデア2", 11, [], "", testUser),
+						new Idea("派生アイデア3", 12, [], "", testUser),
 					]);
 					onSelect(tag);
 				}
@@ -83,9 +84,10 @@ export function MindMap(props: MindMapProps) {
 		<div>
 			<SigmaContainer
 				graph={state.graph}
-				style={{ width: '100%', height: '100vh' }}
+				style={{ width: "100%", height: "100vh" }}
 				settings={{
-					labelColor: { color: '#999999' },
+					labelColor: { color: "#999999" },
+					allowInvalidContainer: true,
 				}}
 			>
 				<Force />
