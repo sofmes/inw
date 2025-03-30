@@ -13,17 +13,20 @@
     "typecheck": "wrangler types && react-router typegen && tsc -b"
   },
   "dependencies": {
-    "@react-router/node": "^7.4.0",
-    "@react-router/serve": "^7.4.0",
+    "@react-router/node": "^7.4.1",
+    "@react-router/serve": "^7.4.1",
+    "cloudflare": "link:@hono/vite-dev-server/cloudflare",
     "drizzle-orm": "~0.36.4",
+    "hono": "^4.7.5",
+    "hono-react-router-adapter": "^0.6.5",
     "isbot": "^5.1.25",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
-    "react-router": "^7.4.0"
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "react-router": "^7.4.1"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250327.0",
-    "@react-router/dev": "^7.4.0",
+    "@react-router/dev": "^7.4.1",
     "@tailwindcss/vite": "^4.0.17",
     "@types/node": "^20.17.28",
     "@types/react": "^19.0.12",
