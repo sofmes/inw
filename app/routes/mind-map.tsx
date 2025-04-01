@@ -4,7 +4,7 @@ import { RootItemContext, SelectedItemContext } from "~/components/Context";
 import { Drawer } from "~/components/Drawer";
 import { Header } from "~/components/Header";
 import { MindMap } from "~/components/mindmap";
-import { type Nodeable, type Root, Tag } from "~/lib/model";
+import type { Nodeable, Root } from "~/lib/model";
 import { initial } from "~/lib/sample-data";
 import type { Route } from "./+types/mind-map";
 
