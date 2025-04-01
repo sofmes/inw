@@ -22,7 +22,7 @@
     "@tailwindcss/typography": "^0.5.16",
     "cloudflare": "link:@hono/vite-dev-server/cloudflare",
     "drizzle-orm": "~0.36.4",
-    "graphology": "^0.26.0",
+    "graphology": "^0.25.4",
     "graphology-layout-forceatlas2": "^0.10.1",
     "graphology-types": "^0.24.8",
     "hono": "^4.7.5",
@@ -42,7 +42,7 @@
     "@hono/vite-dev-server": "^0.19.0",
     "@react-router/dev": "^7.4.1",
     "@tailwindcss/vite": "^4.0.17",
-    "@types/node": "^20.17.28",
+    "@types/node": "^20.17.29",
     "@types/react": "^19.0.12",
     "@types/react-dom": "^19.0.4",
     "daisyui": "^5.0.9",
@@ -50,8 +50,8 @@
     "drizzle-kit": "~0.28.1",
     "tailwindcss": "^4.0.17",
     "typescript": "^5.8.2",
-    "vite": "^5.4.15",
+    "vite": "^5.4.16",
     "vite-tsconfig-paths": "^5.1.4",
-    "wrangler": "^3.28.2"
+    "wrangler": "^3.114.3"
   }
 }
