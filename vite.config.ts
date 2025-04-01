@@ -1,4 +1,3 @@
-import adapter from "@hono/vite-dev-server/cloudflare";
 import { reactRouter } from "@react-router/dev/vite";
 import { cloudflareDevProxy } from "@react-router/dev/vite/cloudflare";
 import tailwindcss from "@tailwindcss/vite";
@@ -39,7 +38,7 @@ export default defineConfig(({ isSsrBuild }) => ({
 		tailwindcss(),
 		reactRouter(),
 		serverAdapter({
-			adapter,
+			getLoadContext,
 			entry: "server/index.ts",
 		}),
 		tsconfigPaths(),

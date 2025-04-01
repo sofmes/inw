@@ -5,6 +5,7 @@
     "app/**/*",
     "app/**/.server/**/*",
     "app/**/.client/**/*",
+    "server/**/*",
     "database/**/*",
     "workers/**/*",
     "load-context.ts",
