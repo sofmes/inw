@@ -10,3 +10,7 @@ binding = "DB"
 database_name = "inw"
 database_id = "007cf749-c9d3-4080-b9f4-c2caf2e63987"
 migrations_dir = "drizzle"
+
+[[kv_namespaces]]
+binding = "tag"
+id = "60ff98b8286446c8af32336399505efd"
