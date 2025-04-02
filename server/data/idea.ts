@@ -68,7 +68,13 @@ export class IdeaDataManager {
 		return data[0].id;
 	}
 
-	async delete(id: number): Promise<void> {
-		await this.db.delete(ideaTable).where(eq(ideaTable.id, id)).limit(1);
+	async delete(id: number): Promise<boolean> {
+		const result = await this.db
+			.delete(ideaTable)
+			.where(eq(ideaTable.id, id))
+			.limit(1)
+			.returning();
+
+		return result.length > 0;
 	}
 }

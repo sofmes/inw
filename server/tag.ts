@@ -5,41 +5,40 @@ import type { Env } from ".";
 
 export const tag = new Hono<Env>();
 
-tag.get(
-	"/:id",
-	zValidator("param", z.object({ id: z.string().transform(Number) })),
-	async c => {
-		const { id } = c.req.valid("param");
-		const value = await c.var.data.tag.get(id);
+const route = tag
+	.get(
+		"/:id",
+		zValidator("param", z.object({ id: z.string().transform(Number) })),
+		async c => {
+			const { id } = c.req.valid("param");
+			const value = await c.var.data.tag.get(id);
+			if (!value) return c.body(null, 404);
 
-		if (value) {
 			return c.text(value?.toString());
-		}
+		},
+	)
+	.post(
+		"/",
+		zValidator("json", z.object({ name: z.string().min(1).max(100) })),
+		async c => {
+			const { name } = c.req.valid("json");
 
-		return c.notFound();
-	},
-);
+			const id = await c.var.data.tag.set(name);
+			c.status(201);
 
-tag.post(
-	"/",
-	zValidator("json", z.object({ name: z.string().min(1).max(100) })),
-	async c => {
-		const { name } = c.req.valid("json");
+			return c.json({ id });
+		},
+	)
+	.delete(
+		"/:id",
+		zValidator("param", z.object({ id: z.string().transform(Number) })),
+		async c => {
+			const { id } = c.req.valid("param");
+			const result = await c.var.data.tag.delete(id);
+			if (!result) c.status(404);
 
-		const id = await c.var.data.tag.set(name);
-		c.status(201);
+			return c.body(null);
+		},
+	);
 
-		return c.json({ id });
-	},
-);
-
-tag.delete(
-	"/:id",
-	zValidator("param", z.object({ id: z.string().transform(Number) })),
-	async c => {
-		const { id } = c.req.valid("param");
-		const wrote = await c.var.data.tag.delete(id);
-
-		return wrote ? c.body(null) : c.notFound();
-	},
-);
+export type TagRoute = typeof route;
