@@ -14,3 +14,11 @@ migrations_dir = "drizzle"
 [[kv_namespaces]]
 binding = "tag"
 id = "60ff98b8286446c8af32336399505efd"
+
+[[kv_namespaces]]
+binding = "tag_name"
+id = "8b90656b4c8c45b9a5f5ed895df5e1e7"
+
+[[kv_namespaces]]
+binding = "tag_id"
+id = "d42d4610fd5642549e5e93971a8850be"

@@ -1,21 +1,24 @@
 import { zValidator } from "@hono/zod-validator";
-import { eq } from "drizzle-orm";
 import { Hono } from "hono";
 import { z } from "zod";
-import { tagTable } from "~/database/schema";
 import type { Env } from ".";
 
-const tag = new Hono<Env>();
+export const tag = new Hono<Env>();
 
-tag.get("/:id", async c => {
-	const value = await c.var.tagCache.get(c.req.param("id"));
+tag.get(
+	"/:id",
+	zValidator("param", z.object({ id: z.string().transform(Number) })),
+	async c => {
+		const { id } = c.req.valid("param");
+		const value = await c.var.data.tag.get(id);
 
-	if (value) {
-		return c.text(value?.toString());
-	}
+		if (value) {
+			return c.text(value?.toString());
+		}
 
-	return c.notFound();
-});
+		return c.notFound();
+	},
+);
 
 tag.post(
 	"/",
@@ -23,34 +26,20 @@ tag.post(
 	async c => {
 		const { name } = c.req.valid("json");
 
-		const row = await c.var.db
-			.insert(tagTable)
-			.values({ name })
-			.returning();
-		await c.var.tagCache.set(row[0].id.toString(), name);
-
+		const id = await c.var.data.tag.set(name);
 		c.status(201);
 
-		return c.json({ id: row[0].id });
+		return c.json({ id });
 	},
 );
 
-tag.delete("/:id", async c => {
-	const id = c.req.param("id");
-	const has = await c.var.tagCache.has(id);
+tag.delete(
+	"/:id",
+	zValidator("param", z.object({ id: z.string().transform(Number) })),
+	async c => {
+		const { id } = c.req.valid("param");
+		const wrote = await c.var.data.tag.delete(id);
 
-	if (has) {
-		await c.var.db
-			.delete(tagTable)
-			.where(eq(tagTable.id, Number.parseInt(id)))
-			.limit(1)
-			.returning();
-		await c.var.tagCache.remove(id);
-
-		return c.body(null);
-	} else {
-		return c.notFound();
-	}
-});
-
-export { tag };
+		return wrote ? c.body(null) : c.notFound();
+	},
+);
