@@ -30,7 +30,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 			.map(tag => (tag.startsWith("#") ? tag.slice(1) : tag)),
 	};
 
-	client.idea.index.$post({ json });
+	await client.idea.index.$post({ json });
 }
 
 export default function MindMapPage({ loaderData }: Route.ComponentProps) {

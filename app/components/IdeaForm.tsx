@@ -54,12 +54,17 @@ export const IdeaForm: React.FC<IdeaFormProps> = ({ isOpen, onClose }) => {
 
 				<div className="flex justify-end gap-4">
 					<button
+						type="button"
 						onClick={onClose}
 						className="bg-gray-600 px-6 py-2 rounded-lg text-lg hover:bg-gray-500 transition"
 					>
 						キャンセル
 					</button>
-					<button className="bg-blue-500 px-6 py-2 rounded-lg text-lg hover:bg-blue-400 transition">
+					<button
+						type="submit"
+						onClick={onClose}
+						className="bg-blue-500 px-6 py-2 rounded-lg text-lg hover:bg-blue-400 transition"
+					>
 						投稿
 					</button>
 				</div>
