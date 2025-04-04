@@ -44,7 +44,7 @@ export default function MindMapPage({ loaderData }: Route.ComponentProps) {
 		);
 
 		return state;
-	}, [rootItem, loaderData]);
+	}, []);
 
 	return (
 		<div className="App">
@@ -58,15 +58,15 @@ export default function MindMapPage({ loaderData }: Route.ComponentProps) {
 						<Outlet />
 					</SelectedItemContext.Provider>
 				</StateContext.Provider>
-
-				<div>
-					{rootItem ? (
-						<MindMap state={state} onSelect={setSelectedItem} />
-					) : null}
-
-					<AddIdeaButton />
-				</div>
 			</RootItemContext.Provider>
+
+			<div>
+				{rootItem ? (
+					<MindMap state={state} onSelect={setSelectedItem} />
+				) : null}
+
+				<AddIdeaButton />
+			</div>
 		</div>
 	);
 }

@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import { useContext, useEffect } from "react";
 import { RootItemContext, useMindMap } from "~/components/Context";
 import { makeClient } from "~/lib/client";
 import { Notice, Tag } from "~/lib/model";
@@ -33,8 +33,10 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 	const [_, setRootItem] = useContext(RootItemContext);
 	const state = useMindMap();
 
-	setRootItem(loaderData.root);
-	state.expand(loaderData.root, loaderData.tags);
+	useEffect(() => {
+		setRootItem(loaderData.root);
+		state.expand(loaderData.root, loaderData.tags);
+	}, [setRootItem]);
 
 	return <></>;
 }
