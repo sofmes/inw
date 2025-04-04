@@ -95,7 +95,6 @@ export class MindMapState {
 		}
 
 		this.objs.set(obj);
-		if (obj.node.startsWith("tag-")) console.log(obj);
 		this.graph.addNode(obj.node, {
 			label: obj.label,
 			size: 50,

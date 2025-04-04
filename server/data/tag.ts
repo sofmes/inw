@@ -40,7 +40,7 @@ export class TagDataManager {
 	async getMultiple(page: number, n: number): Promise<TagData[]> {
 		return await this.db.query.tagTable.findMany({
 			orderBy: [asc(tagTable.id)],
-			limit: n * page,
+			limit: n,
 			offset: n * (page - 1),
 		});
 	}

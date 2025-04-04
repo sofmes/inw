@@ -3,7 +3,6 @@ import { useWorkerLayoutForce } from "@react-sigma/layout-force";
 import { useEffect } from "react";
 import type { MindMapState } from "../../app/lib/graph";
 import type { Nodeable } from "../../app/lib/model";
-import { AddIdeaButton } from "./AddIdeaButton";
 import "./mindmap.css";
 
 function Force() {
@@ -35,6 +34,7 @@ function GraphEvents({ state, onSelect }: GraphEventsProps) {
 		registerEvents({
 			clickStage: _ => onSelect(null),
 			clickNode: payload => {
+				console.log(payload);
 				const tag = state.objs.getTag(payload.node);
 
 				if (tag) {
@@ -60,19 +60,16 @@ export interface MindMapProps {
 
 export function MindMap(props: MindMapProps) {
 	return (
-		<div>
-			<SigmaContainer
-				graph={props.state.graph}
-				style={{ width: "100%", height: "100vh" }}
-				settings={{
-					labelColor: { color: "#999999" },
-					allowInvalidContainer: true,
-				}}
-			>
-				<Force />
-				<GraphEvents state={props.state} onSelect={props.onSelect} />
-			</SigmaContainer>
-			<AddIdeaButton /> {/* 右下のボタンを追加 */}
-		</div>
+		<SigmaContainer
+			graph={props.state.graph}
+			style={{ width: "100%", height: "100vh" }}
+			settings={{
+				labelColor: { color: "#999999" },
+				allowInvalidContainer: true,
+			}}
+		>
+			<Force />
+			<GraphEvents state={props.state} onSelect={props.onSelect} />
+		</SigmaContainer>
 	);
 }

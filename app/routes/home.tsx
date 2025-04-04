@@ -19,7 +19,7 @@ export async function clientLoader({ request }: Route.ClientLoaderArgs) {
 	const client = makeClient(url.origin);
 
 	const response = await client.tag.index.$get({
-		query: { page: url.searchParams.get("page") ?? "0" },
+		query: { page: url.searchParams.get("page") ?? "1" },
 	});
 	const tags = await response.json();
 
