@@ -28,7 +28,7 @@ export function Drawer() {
 							<div className="flex items-center">
 								<div className="w-8 h-8 rounded-full flex items-center justify-center">
 									<img
-										src={selectedItem.author.icon}
+										src={selectedItem.author.iconUrl}
 										alt={selectedItem.author.name}
 										className="w-full h-full object-cover"
 									/>

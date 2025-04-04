@@ -1,5 +1,5 @@
 import { MultiDirectedGraph } from "graphology";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Outlet } from "react-router";
 import { AddIdeaButton } from "~/components/AddIdeaButton";
 import {
@@ -12,7 +12,7 @@ import { Header } from "~/components/Header";
 import { MindMap } from "~/components/mindmap";
 import { makeClient } from "~/lib/client";
 import { MindMapState, StyleStrategy } from "~/lib/graph";
-import { type Nodeable, Notice, type Root } from "~/lib/model";
+import { Idea, type Nodeable, Notice, type Root, User } from "~/lib/model";
 import type { Route } from "./+types/mind-map";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
@@ -30,10 +30,11 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 			.map(tag => (tag.startsWith("#") ? tag.slice(1) : tag)),
 	};
 
-	await client.idea.index.$post({ json });
+	const response = await client.idea.index.$post({ json });
+	return [await response.json(), json] as const;
 }
 
-export default function MindMapPage({ loaderData }: Route.ComponentProps) {
+export default function MindMapPage({ actionData }: Route.ComponentProps) {
 	const [selectedItem, setSelectedItem] = useState<Nodeable | null>(null);
 	const [rootItem, setRootItem] = useState<Root>(new Notice("読み込み中..."));
 
@@ -45,6 +46,20 @@ export default function MindMapPage({ loaderData }: Route.ComponentProps) {
 
 		return state;
 	}, []);
+
+	useEffect(() => {
+		if (!actionData) return;
+		const [{ id, tags }, { name, description }] = actionData;
+
+		const idea = Idea.fromData({
+			name,
+			id,
+			description,
+			author: new User("tasuren", 1, "", null),
+			tags,
+		});
+		state.expand(idea, idea.tags);
+	}, [state, actionData]);
 
 	return (
 		<div className="App">

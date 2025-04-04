@@ -1,3 +1,7 @@
+import type { IdeaData } from "server/data/idea";
+import type { TagData } from "server/data/tag";
+import type { UserData } from "server/data/user";
+
 export abstract class Nodeable {
 	abstract get node(): string;
 	abstract get label(): string;
@@ -25,6 +29,10 @@ export class Tag extends Nodeable {
 		super();
 	}
 
+	static fromData(data: TagData) {
+		return new Tag(data.name, data.id);
+	}
+
 	override get node() {
 		return `tag-${this.id}`;
 	}
@@ -38,9 +46,14 @@ export class User extends Nodeable {
 	constructor(
 		public name: string,
 		public readonly id: number,
-		public readonly icon: string,
+		public bio: string,
+		public iconUrl: string | null,
 	) {
 		super();
+	}
+
+	static fromData(data: UserData) {
+		return new User(data.name, data.id, data.bio, data.iconUrl);
 	}
 
 	override get node() {
@@ -61,6 +74,16 @@ export class Idea extends Nodeable {
 		public author: User,
 	) {
 		super();
+	}
+
+	static fromData(data: IdeaData) {
+		return new Idea(
+			data.name,
+			data.id,
+			data.tags.map(tag => Tag.fromData(tag)),
+			data.description,
+			User.fromData(data.author),
+		);
 	}
 
 	override get node() {

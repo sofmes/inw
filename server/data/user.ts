@@ -1,7 +1,8 @@
 import type { Database } from "../";
 
-export interface User {
+export interface UserData {
 	id: number;
+	iconUrl: string | null;
 	name: string;
 	bio: string;
 }

@@ -36,9 +36,9 @@ const route = idea
 		),
 		async c => {
 			const data = c.req.valid("json");
-			const id = await c.var.data.idea.set(data);
+			const result = await c.var.data.idea.set(data);
 
-			return c.json({ id: id });
+			return c.json(result);
 		},
 	)
 	.delete(
