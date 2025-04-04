@@ -3,9 +3,23 @@ export abstract class Nodeable {
 	abstract get label(): string;
 }
 
+export class Notice extends Nodeable {
+	constructor(public readonly name: string) {
+		super();
+	}
+
+	override get node(): string {
+		return `notice-${this.name}`;
+	}
+
+	override get label() {
+		return this.name;
+	}
+}
+
 export class Tag extends Nodeable {
 	constructor(
-		public name: string,
+		public readonly name: string,
 		public readonly id: number,
 	) {
 		super();
@@ -24,7 +38,7 @@ export class User extends Nodeable {
 	constructor(
 		public name: string,
 		public readonly id: number,
-		public readonly photo: string,
+		public readonly icon: string,
 	) {
 		super();
 	}
@@ -58,4 +72,4 @@ export class Idea extends Nodeable {
 	}
 }
 
-export type Root = Tag | User;
+export type Root = Tag | User | Notice;

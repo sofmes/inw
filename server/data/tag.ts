@@ -1,7 +1,7 @@
-import { eq } from "drizzle-orm";
-import type { DrizzleD1Database } from "drizzle-orm/d1";
+import { asc, eq } from "drizzle-orm";
 import type { Storage, StorageValue } from "unstorage";
 import { tagTable } from "~/database/schema";
+import type { Database } from "../";
 
 export interface TagData {
 	id: number;
@@ -10,7 +10,7 @@ export interface TagData {
 
 export class TagDataManager {
 	constructor(
-		private readonly db: DrizzleD1Database,
+		private readonly db: Database,
 		private readonly nameKv: Storage<StorageValue>,
 		private readonly idKv: Storage<StorageValue>,
 	) {}
@@ -35,6 +35,14 @@ export class TagDataManager {
 		if (!data) return;
 
 		return data.toString();
+	}
+
+	async getMultiple(page: number, n: number): Promise<TagData[]> {
+		return await this.db.query.tagTable.findMany({
+			orderBy: [asc(tagTable.id)],
+			limit: n * page,
+			offset: n * (page - 1),
+		});
 	}
 
 	async set(name: string): Promise<number> {

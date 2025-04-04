@@ -7,6 +7,16 @@ export const tag = new Hono<Env>();
 
 const route = tag
 	.get(
+		"/",
+		zValidator("query", z.object({ page: z.string().transform(Number) })),
+		async c => {
+			const { page } = c.req.valid("query");
+			const data = await c.var.data.tag.getMultiple(page, 10);
+
+			return c.json(data);
+		},
+	)
+	.get(
 		"/:id",
 		zValidator("param", z.object({ id: z.string().transform(Number) })),
 		async c => {

@@ -1,10 +1,12 @@
 import { eq } from "drizzle-orm";
-import type { DrizzleD1Database } from "drizzle-orm/d1";
 import { ideaTable } from "~/database/schema";
+import type { Database } from "../";
 import type { TagData, TagDataManager } from "./tag";
+import type { User } from "./user";
 
 export interface IdeaData {
 	id: number;
+	author: User;
 	name: string;
 	description: string;
 	tags: TagData[];
@@ -12,21 +14,19 @@ export interface IdeaData {
 
 export class IdeaDataManager {
 	constructor(
-		private readonly db: DrizzleD1Database,
+		private readonly db: Database,
 		private readonly tag: TagDataManager,
 	) {}
 
 	async get(id: number): Promise<IdeaData | undefined> {
-		const raw = await this.db
-			.select()
-			.from(ideaTable)
-			.where(eq(ideaTable.id, id))
-			.limit(1)
-			.get();
-		if (!raw) return;
+		const result = await this.db.query.ideaTable.findFirst({
+			where: eq(ideaTable.id, id),
+			with: { author: true },
+		});
+		if (!result) return;
 
 		const tags = [];
-		for (const tagId of raw.tagIds) {
+		for (const tagId of result.tagIds) {
 			const name = await this.tag.get(tagId);
 			if (name) {
 				tags.push({ name, id: tagId });
@@ -35,12 +35,13 @@ export class IdeaDataManager {
 
 		return {
 			tags,
-			...raw,
+			...result,
 		};
 	}
 
 	async set(value: {
 		name: string;
+		authorId: number;
 		description: string;
 		tags: string[];
 	}): Promise<number> {

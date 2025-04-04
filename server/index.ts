@@ -1,7 +1,8 @@
-import { drizzle } from "drizzle-orm/d1";
+import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1";
 import { Hono } from "hono";
 import { createStorage } from "unstorage";
 import cloudflareKVBindingDriver from "unstorage/drivers/cloudflare-kv-binding";
+import * as schema from "../database/schema";
 import { DataManager } from "./data";
 import { IdeaDataManager } from "./data/idea";
 import { TagDataManager } from "./data/tag";
@@ -15,10 +16,11 @@ export type Env = {
 	Bindings: { DB: D1Database; tag_name: KVNamespace; tag_id: KVNamespace };
 };
 
+export type Database = DrizzleD1Database<typeof schema>;
 const app = new Hono<Env>().basePath("/api");
 
 app.use(async (c, next) => {
-	const db = drizzle(c.env.DB);
+	const db = drizzle(c.env.DB, { schema });
 	const tagNameKv = createStorage({
 		driver: cloudflareKVBindingDriver({ binding: c.env.tag_name }),
 	});

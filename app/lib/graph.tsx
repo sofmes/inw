@@ -1,11 +1,11 @@
-import type { MultiDirectedGraph } from 'graphology';
-import type { Attributes } from 'graphology-types';
-import { Idea, type Nodeable, Tag, User } from './model';
+import type { MultiDirectedGraph } from "graphology";
+import type { Attributes } from "graphology-types";
+import { Idea, type Nodeable, type Root, Tag, User } from "./model";
 
 const COLORS = {
-	tag: '#698aab',
-	idea: '#887f7a',
-	user: '#00a497',
+	tag: "#698aab",
+	idea: "#887f7a",
+	user: "#00a497",
 };
 
 export class StyleStrategy {
@@ -49,6 +49,7 @@ class Objects {
 		readonly ideas: Map<string, Idea>,
 		readonly tags: Map<string, Tag>,
 		readonly users: Map<string, User>,
+		readonly others: Map<string, Nodeable>,
 	) {}
 
 	set(obj: Nodeable) {
@@ -59,9 +60,7 @@ class Objects {
 		} else if (obj instanceof User) {
 			this.users.set(obj.node, obj);
 		} else {
-			throw new Error(
-				'指定されたオブジェクトの格納には対応していません。',
-			);
+			this.others.set(obj.node, obj);
 		}
 	}
 
@@ -86,7 +85,7 @@ export class MindMapState {
 		readonly graph: MultiDirectedGraph,
 		readonly style: StyleStrategy,
 	) {
-		this.objs = new Objects(new Map(), new Map(), new Map());
+		this.objs = new Objects(new Map(), new Map(), new Map(), new Map());
 		this.expanded = [];
 	}
 
@@ -96,7 +95,7 @@ export class MindMapState {
 		}
 
 		this.objs.set(obj);
-		if (obj.node.startsWith('tag-')) console.log(obj);
+		if (obj.node.startsWith("tag-")) console.log(obj);
 		this.graph.addNode(obj.node, {
 			label: obj.label,
 			size: 50,
@@ -124,7 +123,7 @@ export class MindMapState {
 		return true;
 	}
 
-	expandDeep(root: Tag | User, children: Idea[]) {
+	expandWithIdeas(root: Root, children: Idea[]) {
 		if (this.expanded.includes(root.node)) return false;
 
 		this.expanded.push(root.node);

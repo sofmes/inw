@@ -6,7 +6,6 @@ import type { Env } from ".";
 export const idea = new Hono<Env>();
 
 const route = idea
-	.get("/", c => c.text("Not implemented"))
 	.get(
 		"/:id",
 		zValidator(
@@ -31,6 +30,7 @@ const route = idea
 			z.object({
 				name: z.string().max(100),
 				description: z.string().max(2000),
+				authorId: z.number(),
 				tags: z.array(z.string().max(100)).max(30),
 			}),
 		),

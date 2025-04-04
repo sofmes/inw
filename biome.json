@@ -41,19 +41,5 @@
 			"trailingCommas": "all"
 		}
 	},
-	"overrides": [
-		{
-			"include": [
-				"*.config.mjs",
-				"*.config.ts",
-				"layout.tsx",
-				"page.tsx",
-				"loading.tsx",
-				"error.tsx",
-				"not-found.tsx"
-			],
-			"linter": {
-			}
-		}
-	]
+	"overrides": []
 }
