@@ -12,7 +12,7 @@ import { Header } from "~/components/Header";
 import { MindMap } from "~/components/mindmap";
 import { makeClient } from "~/lib/client";
 import { MindMapState, StyleStrategy } from "~/lib/graph";
-import { Idea, type Nodeable, Notice, type Root, User } from "~/lib/model";
+import { Idea, type Nodeable, Notice, type Root, Tag, User } from "~/lib/model";
 import type { Route } from "./+types/mind-map";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
@@ -47,6 +47,7 @@ export default function MindMapPage({ actionData }: Route.ComponentProps) {
 		return state;
 	}, []);
 
+	// 投稿したアイデアをマインドマップに反映する。
 	useEffect(() => {
 		if (!actionData) return;
 		const [{ id, tags }, { name, description }] = actionData;
@@ -60,6 +61,29 @@ export default function MindMapPage({ actionData }: Route.ComponentProps) {
 		});
 		state.expand(idea, idea.tags);
 	}, [state, actionData]);
+
+	// タグを選択した際はアイデアを展開する。
+	const onSelectTag = async (tag: Tag) => {
+		const client = makeClient(new URL(location.href).origin);
+
+		const response = await client.idea.index.$get({
+			query: { tagId: tag.id.toString() },
+		});
+		const data = await response.json();
+
+		state.expandWithIdeas(
+			tag,
+			data.map(raw => Idea.fromData(raw)),
+		);
+	};
+
+	useEffect(() => {
+		if (!selectedItem) return;
+
+		if (selectedItem instanceof Tag) {
+			onSelectTag(selectedItem);
+		}
+	}, [selectedItem]);
 
 	return (
 		<div className="App">

@@ -7,6 +7,21 @@ export const idea = new Hono<Env>();
 
 const route = idea
 	.get(
+		"/",
+		zValidator(
+			"query",
+			z.object({
+				tagId: z.string().transform(Number),
+			}),
+		),
+		async c => {
+			const { tagId } = c.req.valid("query");
+			const data = await c.var.data.idea.getByTag(tagId);
+
+			return c.json(data);
+		},
+	)
+	.get(
 		"/:id",
 		zValidator(
 			"param",

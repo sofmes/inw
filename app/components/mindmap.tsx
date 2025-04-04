@@ -34,7 +34,6 @@ function GraphEvents({ state, onSelect }: GraphEventsProps) {
 		registerEvents({
 			clickStage: _ => onSelect(null),
 			clickNode: payload => {
-				console.log(payload);
 				const tag = state.objs.getTag(payload.node);
 
 				if (tag) {
