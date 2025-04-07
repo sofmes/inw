@@ -1,8 +1,10 @@
 import { type DrizzleD1Database, drizzle } from "drizzle-orm/d1";
 import { Hono } from "hono";
+import { cors } from "hono/cors";
 import { createStorage } from "unstorage";
 import cloudflareKVBindingDriver from "unstorage/drivers/cloudflare-kv-binding";
 import * as schema from "../database/schema";
+import { auth } from "./auth/auth";
 import { DataManager } from "./data";
 import { IdeaDataManager } from "./data/idea";
 import { TagDataManager } from "./data/tag";
@@ -18,6 +20,21 @@ export type Env = {
 
 export type Database = DrizzleD1Database<typeof schema>;
 const app = new Hono<Env>().basePath("/api");
+
+app.use(
+	cors({
+		origin: "http://localhost:5173",
+		allowHeaders: ["Content-Type", "Authorization"],
+		allowMethods: ["POST", "GET", "OPTIONS"],
+		credentials: true,
+	}),
+);
+
+app.on(["POST", "GET"], "/auth/*", async c => {
+	console.log(`認証エンドポイントへのアクセス: ${c.req.method} ${c.req.url}`);
+	const authInstance = await auth(c);
+	return await authInstance.handler(c.req.raw);
+});
 
 app.use(async (c, next) => {
 	const db = drizzle(c.env.DB, { schema });

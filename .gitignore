@@ -12,3 +12,8 @@
 
 # Editor
 *.code-workspace
+
+.env
+.dev.vars
+
+.drizzle

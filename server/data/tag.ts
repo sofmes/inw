@@ -1,6 +1,6 @@
 import { asc, eq } from "drizzle-orm";
 import type { Storage, StorageValue } from "unstorage";
-import { tagTable } from "~/database/schema";
+import { tag } from "~/database/schema";
 import type { Database } from "../";
 
 export interface TagData {
@@ -38,15 +38,15 @@ export class TagDataManager {
 	}
 
 	async getMultiple(page: number, n: number): Promise<TagData[]> {
-		return await this.db.query.tagTable.findMany({
-			orderBy: [asc(tagTable.id)],
+		return await this.db.query.tag.findMany({
+			orderBy: [asc(tag.id)],
 			limit: n,
 			offset: n * (page - 1),
 		});
 	}
 
 	async set(name: string): Promise<number> {
-		const row = await this.db.insert(tagTable).values({ name }).returning();
+		const row = await this.db.insert(tag).values({ name }).returning();
 		const stringId = row[0].id.toString();
 
 		await this.nameKv.set(stringId, name);
@@ -61,8 +61,8 @@ export class TagDataManager {
 
 		if (name) {
 			await this.db
-				.delete(tagTable)
-				.where(eq(tagTable.id, id))
+				.delete(tag)
+				.where(eq(tag.id, id))
 				.limit(1)
 				.returning();
 			await this.nameKv.remove(stringId);
