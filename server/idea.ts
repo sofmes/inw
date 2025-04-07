@@ -45,7 +45,7 @@ const route = idea
 			z.object({
 				name: z.string().max(100),
 				description: z.string().max(2000),
-				authorId: z.number(),
+				authorId: z.string(),
 				tags: z.array(z.string().max(100)).max(30),
 			}),
 		),

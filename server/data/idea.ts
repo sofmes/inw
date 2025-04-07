@@ -1,5 +1,5 @@
 import { eq, like } from "drizzle-orm";
-import { ideaTable } from "~/database/schema";
+import { idea } from "~/database/schema";
 import type { Database } from "../";
 import type { TagData, TagDataManager } from "./tag";
 import type { UserData } from "./user";
@@ -37,8 +37,8 @@ export class IdeaDataManager {
 	}
 
 	async get(id: number): Promise<IdeaData | undefined> {
-		const result = await this.db.query.ideaTable.findFirst({
-			where: eq(ideaTable.id, id),
+		const result = await this.db.query.idea.findFirst({
+			where: eq(idea.id, id),
 			with: { author: true },
 		});
 		if (!result) return;
@@ -47,8 +47,8 @@ export class IdeaDataManager {
 	}
 
 	async getByTag(tagId: number): Promise<IdeaData[]> {
-		const result = await this.db.query.ideaTable.findMany({
-			where: like(ideaTable.tagIds, `%${tagId}%`),
+		const result = await this.db.query.idea.findMany({
+			where: like(idea.tagIds, `%${tagId}%`),
 			with: { author: true },
 		});
 
@@ -62,7 +62,7 @@ export class IdeaDataManager {
 
 	async set(value: {
 		name: string;
-		authorId: number;
+		authorId: string;
 		description: string;
 		tags: string[];
 	}): Promise<{ id: number; tags: TagData[] }> {
@@ -80,7 +80,7 @@ export class IdeaDataManager {
 		}
 
 		const data = await this.db
-			.insert(ideaTable)
+			.insert(idea)
 			.values({
 				tagIds: tags.map(tag => tag.id),
 				...value,
@@ -92,8 +92,8 @@ export class IdeaDataManager {
 
 	async delete(id: number): Promise<boolean> {
 		const result = await this.db
-			.delete(ideaTable)
-			.where(eq(ideaTable.id, id))
+			.delete(idea)
+			.where(eq(idea.id, id))
 			.limit(1)
 			.returning();
 
