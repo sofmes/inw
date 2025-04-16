@@ -45,6 +45,11 @@ function GraphEvents({ state, onSelect }: GraphEventsProps) {
 				if (idea) {
 					onSelect(idea);
 				}
+
+				const trigger = state.objs.getTrigger(payload.node);
+				if (trigger && trigger.onClick !== undefined) {
+					trigger.onClick();
+				}
 			},
 		});
 	}, [registerEvents]);
