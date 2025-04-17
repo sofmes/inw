@@ -55,7 +55,7 @@ export class Tag extends Nodeable {
 	}
 
 	override get label() {
-		return this.name;
+		return `#${this.name}`;
 	}
 }
 

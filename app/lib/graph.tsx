@@ -102,7 +102,7 @@ export class MindMapState {
 		this.expanded = [];
 	}
 
-	addNode(obj: Nodeable) {
+	addNode(obj: Nodeable, offset?: { x: number; y: number }) {
 		if (this.graph.hasNode(obj.node)) {
 			return;
 		}
@@ -110,9 +110,9 @@ export class MindMapState {
 		this.objs.set(obj);
 		this.graph.addNode(obj.node, {
 			label: obj.label,
-			size: 50,
-			x: Math.random() * 10,
-			y: Math.random() * 10,
+			size: 30,
+			x: offset?.x ?? 0 + Math.random() * 100,
+			y: offset?.y ?? 0 + Math.random() * 100,
 			...this.style.getStyle(obj),
 		});
 	}
