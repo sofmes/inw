@@ -12,3 +12,6 @@
 
 # Editor
 *.code-workspace
+
+.dev.vars
+.dev.vars.copy

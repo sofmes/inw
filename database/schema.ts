@@ -1,31 +1,34 @@
-import { relations } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const userTable = sqliteTable("user", {
-	id: integer().notNull().primaryKey({ autoIncrement: true }),
-	iconUrl: text(),
-	name: text().notNull(),
-	bio: text().notNull(),
+export const users = sqliteTable("users", {
+	id: text("id").primaryKey(),
+	name: text("name").notNull(),
+	email: text("email").notNull().unique(),
+	image: text("image"),
+	description: text("description"),
+	createdAt: integer("created_at", { mode: "timestamp" })
+		.notNull()
+		.default(sql`CURRENT_TIMESTAMP`),
+	updatedAt: integer("updated_at", { mode: "timestamp" })
+		.notNull()
+		.default(sql`CURRENT_TIMESTAMP`),
 });
-
-export const userRelations = relations(userTable, ({ many }) => ({
-	ideas: many(ideaTable),
-}));
 
 export const ideaTable = sqliteTable("idea", {
 	id: integer().notNull().primaryKey({ autoIncrement: true }),
-	authorId: integer()
+	authorId: text()
 		.notNull()
-		.references(() => userTable.id),
+		.references(() => users.id),
 	name: text().notNull(),
 	description: text().notNull(),
 	tagIds: text({ mode: "json" }).$type<number[]>().notNull().default([]),
 });
 
 export const ideaReations = relations(ideaTable, ({ one }) => ({
-	author: one(userTable, {
+	author: one(users, {
 		fields: [ideaTable.authorId],
-		references: [userTable.id],
+		references: [users.id],
 	}),
 }));
 
