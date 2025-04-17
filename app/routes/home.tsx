@@ -1,8 +1,7 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { RootItemContext, useMindMap } from "~/components/Context";
 import { makeClient } from "~/lib/client";
-import { Notice, Tag } from "~/lib/model";
-import type { Route } from "./+types/home";
+import { Tag, Trigger } from "~/lib/model";
 
 export function meta() {
 	return [
@@ -14,29 +13,58 @@ export function meta() {
 	];
 }
 
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-	const url = new URL(request.url);
+async function getData(url: URL, page: string) {
 	const client = makeClient(url.origin);
 
 	const response = await client.tag.index.$get({
-		query: { page: url.searchParams.get("page") ?? "1" },
+		query: { page },
 	});
 	const tags = await response.json();
 
 	return {
-		root: new Notice("アイデアネットワーク"),
+		root: null,
 		tags: tags.map(tag => new Tag(tag.name, tag.id)),
 	};
 }
 
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function Home() {
 	const [_, setRootItem] = useContext(RootItemContext);
+	const [page, setPage] = useState(1);
 	const state = useMindMap();
 
+	// 最初のタグを追加する。
+	const addTags = (tags: Tag[]) => {
+		if (tags.length === 0) return;
+
+		for (const tag of tags) {
+			state.addNode(tag);
+		}
+	};
+
 	useEffect(() => {
-		setRootItem(loaderData.root);
-		state.expand(loaderData.root, loaderData.tags);
-	}, [setRootItem]);
+		(async () => {
+			if (typeof location === "undefined") return;
+
+			const data = await getData(new URL(location.href), page.toString());
+			addTags(data.tags);
+		})();
+	}, [page]);
+
+	// タグをもっと読み込むためのボタン
+	const loadTagsTrigger = useMemo(() => {
+		const trigger = new Trigger("タグをもっと読み込む");
+		state.addNode(trigger);
+		return trigger;
+	}, []);
+
+	useEffect(() => {
+		const triggerHandler = async () => {
+			console.log(page);
+			setPage(page + 1);
+		};
+
+		loadTagsTrigger.onClick = triggerHandler;
+	}, [page]);
 
 	return <></>;
 }

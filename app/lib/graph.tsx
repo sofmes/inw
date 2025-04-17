@@ -1,6 +1,6 @@
 import type { MultiDirectedGraph } from "graphology";
 import type { Attributes } from "graphology-types";
-import { Idea, type Nodeable, type Root, Tag, User } from "./model";
+import { Idea, type Nodeable, type Root, Tag, Trigger, User } from "./model";
 
 const COLORS = {
 	tag: "#698aab",
@@ -49,6 +49,7 @@ class Objects {
 		readonly ideas: Map<string, Idea>,
 		readonly tags: Map<string, Tag>,
 		readonly users: Map<string, User>,
+		readonly triggers: Map<string, Trigger>,
 		readonly others: Map<string, Nodeable>,
 	) {}
 
@@ -59,6 +60,8 @@ class Objects {
 			this.tags.set(obj.node, obj);
 		} else if (obj instanceof User) {
 			this.users.set(obj.node, obj);
+		} else if (obj instanceof Trigger) {
+			this.triggers.set(obj.node, obj);
 		} else {
 			this.others.set(obj.node, obj);
 		}
@@ -75,6 +78,10 @@ class Objects {
 	getUser(key: string): User | undefined {
 		return this.users.get(key);
 	}
+
+	getTrigger(key: string): Trigger | undefined {
+		return this.triggers.get(key);
+	}
 }
 
 export class MindMapState {
@@ -85,11 +92,17 @@ export class MindMapState {
 		readonly graph: MultiDirectedGraph,
 		readonly style: StyleStrategy,
 	) {
-		this.objs = new Objects(new Map(), new Map(), new Map(), new Map());
+		this.objs = new Objects(
+			new Map(),
+			new Map(),
+			new Map(),
+			new Map(),
+			new Map(),
+		);
 		this.expanded = [];
 	}
 
-	addNode(obj: Nodeable) {
+	addNode(obj: Nodeable, offset?: { x: number; y: number }) {
 		if (this.graph.hasNode(obj.node)) {
 			return;
 		}
@@ -97,9 +110,9 @@ export class MindMapState {
 		this.objs.set(obj);
 		this.graph.addNode(obj.node, {
 			label: obj.label,
-			size: 50,
-			x: Math.random() * 10,
-			y: Math.random() * 10,
+			size: 30,
+			x: offset?.x ?? 0 + Math.random() * 100,
+			y: offset?.y ?? 0 + Math.random() * 100,
 			...this.style.getStyle(obj),
 		});
 	}

@@ -21,6 +21,23 @@ export class Notice extends Nodeable {
 	}
 }
 
+export class Trigger extends Nodeable {
+	constructor(
+		public readonly name: string,
+		public onClick?: () => void,
+	) {
+		super();
+	}
+
+	override get node(): string {
+		return `trigger-${this.name}`;
+	}
+
+	override get label(): string {
+		return this.name;
+	}
+}
+
 export class Tag extends Nodeable {
 	constructor(
 		public readonly name: string,
@@ -38,7 +55,7 @@ export class Tag extends Nodeable {
 	}
 
 	override get label() {
-		return this.name;
+		return `#${this.name}`;
 	}
 }
 
