@@ -1,9 +1,7 @@
-import { useContext, useEffect, useMemo } from "react";
-import { useSearchParams } from "react-router";
+import { useContext, useEffect, useMemo, useState } from "react";
 import { RootItemContext, useMindMap } from "~/components/Context";
 import { makeClient } from "~/lib/client";
 import { Tag, Trigger } from "~/lib/model";
-import type { Route } from "./+types/home";
 
 export function meta() {
 	return [
@@ -29,26 +27,30 @@ async function getData(url: URL, page: string) {
 	};
 }
 
-export async function clientLoader({ request }: Route.ClientLoaderArgs) {
-	const url = new URL(request.url);
-
-	return await getData(url, url.searchParams.get("page") ?? "1");
-}
-
-export default function Home({ loaderData }: Route.ComponentProps) {
+export default function Home() {
 	const [_, setRootItem] = useContext(RootItemContext);
+	const [page, setPage] = useState(1);
 	const state = useMindMap();
 
 	// 最初のタグを追加する。
 	const addTags = (tags: Tag[]) => {
+		if (tags.length === 0) return;
+
 		for (const tag of tags) {
 			state.addNode(tag);
 		}
 	};
-	addTags(loaderData.tags);
+
+	useEffect(() => {
+		(async () => {
+			if (typeof location === "undefined") return;
+
+			const data = await getData(new URL(location.href), page.toString());
+			addTags(data.tags);
+		})();
+	}, [page]);
 
 	// タグをもっと読み込むためのボタン
-	const [searchParams, setSearchParams] = useSearchParams();
 	const loadTagsTrigger = useMemo(() => {
 		const trigger = new Trigger("タグをもっと読み込む");
 		state.addNode(trigger);
@@ -56,16 +58,13 @@ export default function Home({ loaderData }: Route.ComponentProps) {
 	}, []);
 
 	useEffect(() => {
-		const page = Number.parseInt(searchParams.get("page") ?? "1");
-
 		const triggerHandler = async () => {
-			setSearchParams(
-				new URLSearchParams({ page: (page + 1).toString() }),
-			);
+			console.log(page);
+			setPage(page + 1);
 		};
 
 		loadTagsTrigger.onClick = triggerHandler;
-	}, [searchParams, setSearchParams]);
+	}, [page]);
 
 	return <></>;
 }
