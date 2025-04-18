@@ -18,7 +18,7 @@ export class IdeaDataManager {
 		private readonly tag: TagDataManager,
 	) {}
 
-	async mapTag(
+	async addTags(
 		raw: Omit<IdeaData, "tags"> & { tagIds: number[] },
 	): Promise<IdeaData> {
 		const tags = [];
@@ -36,6 +36,19 @@ export class IdeaDataManager {
 		};
 	}
 
+	replaceAuthorNull(
+		raw: Omit<UserData, "image" | "description"> & {
+			image: string | null;
+			description: string | null;
+		},
+	): UserData {
+		return {
+			...raw,
+			image: raw.image ?? undefined,
+			description: raw.description ?? undefined,
+		};
+	}
+
 	async get(id: number): Promise<IdeaData | undefined> {
 		const result = await this.db.query.ideaTable.findFirst({
 			where: eq(ideaTable.id, id),
@@ -43,18 +56,28 @@ export class IdeaDataManager {
 		});
 		if (!result) return;
 
-		return await this.mapTag(result);
+		return await this.addTags({
+			...result,
+			author: this.replaceAuthorNull(result.author),
+		});
 	}
 
-	async getByTag(tagId: number): Promise<IdeaData[]> {
+	async getByTag(tagId: number, page = 1, size = 10): Promise<IdeaData[]> {
 		const result = await this.db.query.ideaTable.findMany({
 			where: like(ideaTable.tagIds, `%${tagId}%`),
+			offset: size * (page - 1),
+			limit: size * page,
 			with: { author: true },
 		});
 
 		const data = [];
 		for (const raw of result) {
-			data.push(await this.mapTag(raw));
+			data.push(
+				await this.addTags({
+					...raw,
+					author: this.replaceAuthorNull(raw.author),
+				}),
+			);
 		}
 
 		return data;
@@ -62,7 +85,7 @@ export class IdeaDataManager {
 
 	async set(value: {
 		name: string;
-		authorId: number;
+		authorId: string;
 		description: string;
 		tags: string[];
 	}): Promise<{ id: number; tags: TagData[] }> {

@@ -1,5 +1,5 @@
 import { eq } from "drizzle-orm";
-import { users } from "../../database/schema";
+import { userTable } from "../../database/schema";
 import type { Database } from "../index";
 
 export interface UserData {
@@ -24,8 +24,8 @@ export class UserDataManager {
 			// メールアドレスで検索
 			const existingUser = await this.db
 				.select()
-				.from(users)
-				.where(eq(users.email, user.email))
+				.from(userTable)
+				.where(eq(userTable.email, user.email))
 				.get();
 
 			console.log(
@@ -36,7 +36,7 @@ export class UserDataManager {
 			if (existingUser) {
 				console.log("createOrUpdateUser: 既存ユーザーを更新します");
 				await this.db
-					.update(users)
+					.update(userTable)
 					.set({
 						id: user.id,
 						name: user.name,
@@ -45,13 +45,13 @@ export class UserDataManager {
 						description: existingUser.description, // 既存のdescriptionを保持
 						updatedAt: new Date(),
 					})
-					.where(eq(users.email, user.email));
+					.where(eq(userTable.email, user.email));
 
 				return this.getUserById(user.id);
 			}
 
 			console.log("createOrUpdateUser: 新規ユーザーを作成します");
-			await this.db.insert(users).values({
+			await this.db.insert(userTable).values({
 				id: user.id,
 				name: user.name,
 				email: user.email,
@@ -77,7 +77,10 @@ export class UserDataManager {
 	async getUserById(id: string) {
 		try {
 			console.log("getUserById: 検索開始, ID:", id);
-			const query = this.db.select().from(users).where(eq(users.id, id));
+			const query = this.db
+				.select()
+				.from(userTable)
+				.where(eq(userTable.id, id));
 
 			console.log("getUserById: 実行するSQLクエリ:", query.toSQL());
 
@@ -102,12 +105,12 @@ export class UserDataManager {
 	async updateUser(id: string, data: Partial<UserData>) {
 		try {
 			await this.db
-				.update(users)
+				.update(userTable)
 				.set({
 					...data,
 					updatedAt: new Date(),
 				})
-				.where(eq(users.id, id));
+				.where(eq(userTable.id, id));
 
 			return this.getUserById(id);
 		} catch (error) {

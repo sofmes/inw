@@ -39,11 +39,14 @@ export class Trigger extends Nodeable {
 }
 
 export class Tag extends Nodeable {
+	page: number;
+
 	constructor(
 		public readonly name: string,
 		public readonly id: number,
 	) {
 		super();
+		this.page = 0;
 	}
 
 	static fromData(data: TagData) {
@@ -62,15 +65,15 @@ export class Tag extends Nodeable {
 export class User extends Nodeable {
 	constructor(
 		public name: string,
-		public readonly id: number,
-		public bio: string,
-		public iconUrl: string | null,
+		public readonly id: string,
+		public description: string | undefined,
+		public iconUrl: string | undefined,
 	) {
 		super();
 	}
 
 	static fromData(data: UserData) {
-		return new User(data.name, data.id, data.bio, data.iconUrl);
+		return new User(data.name, data.id, data.description, data.image);
 	}
 
 	override get node() {

@@ -10,9 +10,10 @@ import {
 import { Drawer } from "~/components/Drawer";
 import { Header } from "~/components/Header";
 import { MindMap } from "~/components/mindmap";
+import { useUser } from "~/hooks/useUser";
 import { makeClient } from "~/lib/client";
 import { MindMapState, StyleStrategy } from "~/lib/graph";
-import { Idea, type Nodeable, Notice, type Root, Tag, User } from "~/lib/model";
+import { Idea, type Nodeable, Notice, type Root } from "~/lib/model";
 import type { Route } from "./+types/mind-map";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
@@ -21,7 +22,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 	const json = {
 		name: data.get("name")!.toString(),
-		authorId: 1, // TODO: ログイン機能を実装したら、これを設定する。
+		authorId: "1", // TODO: ログイン機能を実装したら、これを設定する。
 		description: data.get("description")!.toString(),
 		tags: data
 			.get("tags")!
@@ -37,6 +38,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 export default function MindMapPage({ actionData }: Route.ComponentProps) {
 	const [selectedItem, setSelectedItem] = useState<Nodeable | null>(null);
 	const [rootItem, setRootItem] = useState<Root>(new Notice("読み込み中..."));
+	const user = useUser();
 
 	const state = useMemo(() => {
 		const state = new MindMapState(
@@ -49,14 +51,14 @@ export default function MindMapPage({ actionData }: Route.ComponentProps) {
 
 	// 投稿したアイデアをマインドマップに反映する。
 	useEffect(() => {
-		if (!actionData) return;
+		if (!actionData || !user.data) return;
 		const [{ id, tags }, { name, description }] = actionData;
 
 		const idea = Idea.fromData({
 			name,
 			id,
 			description,
-			author: new User("tasuren", 1, "", null),
+			author: user.data,
 			tags,
 		});
 		state.expand(idea, idea.tags);
@@ -81,7 +83,7 @@ export default function MindMapPage({ actionData }: Route.ComponentProps) {
 					<MindMap state={state} onSelect={setSelectedItem} />
 				) : null}
 
-				<AddIdeaButton />
+				{user.data ? <AddIdeaButton /> : null}
 			</div>
 		</div>
 	);

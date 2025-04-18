@@ -4,14 +4,14 @@ import { Hono } from "hono";
 import { createStorage } from "unstorage";
 import cloudflareKVBindingDriver from "unstorage/drivers/cloudflare-kv-binding";
 import * as schema from "../database/schema";
-import { authRoutes } from "./auth";
+import { auth } from "./auth";
 import { DataManager } from "./data";
 import { IdeaDataManager } from "./data/idea";
 import { TagDataManager } from "./data/tag";
 import { UserDataManager } from "./data/user";
 import { idea } from "./idea";
 import { tag } from "./tag";
-import { usersRouter } from "./users";
+import { user } from "./user";
 
 export type Env = {
 	Variables: {
@@ -96,7 +96,7 @@ app.get("/ping", c => c.text("pong"));
 
 app.route("/tag", tag);
 app.route("/idea", idea);
-app.route("/auth", authRoutes);
-app.route("/users", usersRouter);
+app.route("/auth", auth);
+app.route("/users", user);
 
 export default app;

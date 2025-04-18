@@ -31,8 +31,9 @@ type Env = {
 	};
 };
 
-export const authRoutes = new Hono<Env>();
-authRoutes.all("/*", async c => {
+export const auth = new Hono<Env>();
+
+auth.all("/*", async c => {
 	const db = drizzle(c.env.DB, { schema }) as Database;
 	const userData = new UserDataManager(db);
 
@@ -68,7 +69,7 @@ authRoutes.all("/*", async c => {
 				}
 			},
 			// サインインコールバック
-			signIn: async ({ user, account, profile }) => {
+			signIn: async ({ user }) => {
 				try {
 					if (!user.id) {
 						console.error("User ID is missing");

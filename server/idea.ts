@@ -12,11 +12,12 @@ const route = idea
 			"query",
 			z.object({
 				tagId: z.string().transform(Number),
+				page: z.string().optional().default("1").transform(Number),
 			}),
 		),
 		async c => {
-			const { tagId } = c.req.valid("query");
-			const data = await c.var.data.idea.getByTag(tagId);
+			const { tagId, page } = c.req.valid("query");
+			const data = await c.var.data.idea.getByTag(tagId, page, 1);
 
 			return c.json(data);
 		},
@@ -45,7 +46,7 @@ const route = idea
 			z.object({
 				name: z.string().max(100),
 				description: z.string().max(2000),
-				authorId: z.number(),
+				authorId: z.string(),
 				tags: z.array(z.string().max(100)).max(30),
 			}),
 		),

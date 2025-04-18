@@ -123,10 +123,9 @@ export class MindMapState {
 	}
 
 	expand(root: Nodeable, children: Nodeable[]) {
-		if (this.expanded.includes(root.node)) return false;
+		if (!this.expanded.includes(root.node)) this.addNode ;
 
 		this.expanded.push(root.node);
-		this.addNode(root);
 
 		for (const child of children) {
 			this.addChildNode(root, child);
@@ -136,7 +135,6 @@ export class MindMapState {
 	}
 
 	expandWithIdeas(root: Root, children: Idea[]) {
-		if (this.expanded.includes(root.node)) return false;
 
 		this.expanded.push(root.node);
 		this.addNode(root);

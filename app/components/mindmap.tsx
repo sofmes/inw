@@ -32,7 +32,7 @@ async function expandTag(state: MindMapState, tag: Tag) {
 	const client = makeClient(new URL(location.href).origin);
 
 	const response = await client.idea.index.$get({
-		query: { tagId: tag.id.toString() },
+		query: { tagId: tag.id.toString(), page: (++tag.page).toString() },
 	});
 	const data = await response.json();
 
