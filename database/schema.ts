@@ -1,7 +1,7 @@
 import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
 
-export const users = sqliteTable("users", {
+export const userTable = sqliteTable("user", {
 	id: text("id").primaryKey(),
 	name: text("name").notNull(),
 	email: text("email").notNull().unique(),
@@ -19,16 +19,16 @@ export const ideaTable = sqliteTable("idea", {
 	id: integer().notNull().primaryKey({ autoIncrement: true }),
 	authorId: text()
 		.notNull()
-		.references(() => users.id),
+		.references(() => userTable.id),
 	name: text().notNull(),
 	description: text().notNull(),
 	tagIds: text({ mode: "json" }).$type<number[]>().notNull().default([]),
 });
 
 export const ideaReations = relations(ideaTable, ({ one }) => ({
-	author: one(users, {
+	author: one(userTable, {
 		fields: [ideaTable.authorId],
-		references: [users.id],
+		references: [userTable.id],
 	}),
 }));
 
