@@ -22,7 +22,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 
 	const json = {
 		name: data.get("name")!.toString(),
-		authorId: "1", // TODO: ログイン機能を実装したら、これを設定する。
+		authorId: data.get("userId")!.toString(),
 		description: data.get("description")!.toString(),
 		tags: data
 			.get("tags")!

@@ -59,7 +59,6 @@ export default function Home() {
 
 	useEffect(() => {
 		const triggerHandler = async () => {
-			console.log(page);
 			setPage(page + 1);
 		};
 

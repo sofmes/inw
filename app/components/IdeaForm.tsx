@@ -1,5 +1,6 @@
 import type React from "react";
-import { Form, useActionData } from "react-router";
+import { Form } from "react-router";
+import { useUser } from "~/hooks/useUser";
 
 interface IdeaFormProps {
 	isOpen: boolean;
@@ -7,6 +8,9 @@ interface IdeaFormProps {
 }
 
 export const IdeaForm: React.FC<IdeaFormProps> = ({ isOpen, onClose }) => {
+	const user = useUser();
+	if (!user.data) return;
+
 	return (
 		<div
 			className={`fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex items-center justify-center z-50
@@ -18,6 +22,8 @@ export const IdeaForm: React.FC<IdeaFormProps> = ({ isOpen, onClose }) => {
 				method="post"
 			>
 				<h2 className="text-2xl font-bold mb-6">アイデア投稿</h2>
+
+				<input name="userId" value={user.data.id} hidden />
 
 				<label htmlFor="name" className="block text-lg mb-2">
 					タイトル

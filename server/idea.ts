@@ -47,7 +47,7 @@ const route = idea
 				name: z.string().max(100),
 				description: z.string().max(2000),
 				authorId: z.string(),
-				tags: z.array(z.string().max(100)).max(30),
+				tags: z.array(z.string().max(100)).min(1).max(30),
 			}),
 		),
 		async c => {
