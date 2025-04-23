@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useSession } from "~/hooks/useSession";
+import { userClient } from "~/lib/client";
 
 interface UserData {
 	id: string;
@@ -27,8 +28,7 @@ export const useUser = () => {
 			}
 
 			try {
-				const response = await fetch(`/api/users/${session.user.id}`);
-				console.log(response);
+				const response = await userClient.index.$get();
 				if (!response.ok) {
 					throw new Error("Failed to fetch user data");
 				}

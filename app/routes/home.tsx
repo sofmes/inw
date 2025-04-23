@@ -1,6 +1,6 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import { RootItemContext, useMindMap } from "~/components/Context";
-import { makeClient } from "~/lib/client";
+import { tagClient } from "~/lib/client";
 import { Tag, Trigger } from "~/lib/model";
 
 export function meta() {
@@ -14,9 +14,7 @@ export function meta() {
 }
 
 async function getData(url: URL, page: string) {
-	const client = makeClient(url.origin);
-
-	const response = await client.tag.index.$get({
+	const response = await tagClient.index.$get({
 		query: { page },
 	});
 	const tags = await response.json();
@@ -43,8 +41,6 @@ export default function Home() {
 
 	useEffect(() => {
 		(async () => {
-			if (typeof location === "undefined") return;
-
 			const data = await getData(new URL(location.href), page.toString());
 			addTags(data.tags);
 		})();

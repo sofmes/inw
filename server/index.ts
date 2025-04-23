@@ -11,7 +11,7 @@ import { UserDataManager } from "./data/user";
 import { type Session, assertSession, getSession } from "./helper/user";
 import { ideaApp } from "./idea";
 import { tagApp } from "./tag";
-import { usersApp } from "./user";
+import { userApp } from "./user";
 
 export type Env = {
 	Variables: {
@@ -59,6 +59,6 @@ app.get("/ping", c => c.text("pong"));
 app.route("/tag", tagApp);
 app.route("/idea", ideaApp);
 app.route("/auth", authApp);
-app.route("/users", usersApp);
+app.route("/user", userApp);
 
 export default app;

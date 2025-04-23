@@ -5,7 +5,7 @@ import { HTTPException } from "hono/http-exception";
 import { userTable } from "../database/schema";
 import type { Env } from "./index";
 
-export const usersApp = new Hono<Env>();
+export const userApp = new Hono<Env>();
 
 // ユーザー情報を取得する関数
 async function getUserById(id: string, db: D1Database) {
@@ -37,7 +37,7 @@ async function getUserById(id: string, db: D1Database) {
 	}
 }
 
-const usersRoute = usersApp
+const route = userApp
 	// ユーザー詳細取得
 	.get("/", async c => {
 		const session = await c.var.auth.assertSession();
@@ -60,4 +60,4 @@ const usersRoute = usersApp
 		return c.json(updatedUser);
 	});
 
-export type UsersRoute = typeof usersRoute;
+export type UserRoute = typeof route;

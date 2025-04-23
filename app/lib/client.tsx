@@ -1,22 +1,14 @@
 import { hc } from "hono/client";
 import type { IdeaRoute } from "server/idea";
 import type { TagRoute } from "server/tag";
+import type { UserRoute } from "server/user";
 
-const ideaTemp = hc<IdeaRoute>("");
-const tagTemp = hc<TagRoute>("");
-const clientTemp = { idea: ideaTemp, tag: tagTemp };
-
-let client: typeof clientTemp | undefined = undefined;
-
-export function makeClient(origin: string) {
-	const baseUrl = `${origin}/api`;
-	const ideaClient = hc<IdeaRoute>(`${baseUrl}/idea`);
-	const tagClient = hc<TagRoute>(`${baseUrl}/tag`);
-
-	client = {
-		idea: ideaClient,
-		tag: tagClient,
-	};
-
-	return client;
+let origin = "";
+if (typeof location !== "undefined") {
+	origin = location.origin;
 }
+
+const baseUrl = `${origin}/api`;
+export const ideaClient = hc<IdeaRoute>(`${baseUrl}/idea`);
+export const tagClient = hc<TagRoute>(`${baseUrl}/tag`);
+export const userClient = hc<UserRoute>(`${baseUrl}/user`);

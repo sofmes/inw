@@ -1,7 +1,7 @@
 import { SigmaContainer, useRegisterEvents } from "@react-sigma/core";
 import { useWorkerLayoutForce } from "@react-sigma/layout-force";
 import { useEffect } from "react";
-import { makeClient } from "~/lib/client";
+import { ideaClient } from "~/lib/client";
 import type { MindMapState } from "../../app/lib/graph";
 import { Idea, type Nodeable, type Tag } from "../../app/lib/model";
 import "./mindmap.css";
@@ -29,9 +29,7 @@ interface GraphEventsProps {
 }
 
 async function expandTag(state: MindMapState, tag: Tag) {
-	const client = makeClient(new URL(location.href).origin);
-
-	const response = await client.idea.index.$get({
+	const response = await ideaClient.index.$get({
 		query: { tagId: tag.id.toString(), page: (++tag.page).toString() },
 	});
 	const data = await response.json();

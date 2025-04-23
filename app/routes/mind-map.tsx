@@ -11,14 +11,13 @@ import { Drawer } from "~/components/Drawer";
 import { Header } from "~/components/Header";
 import { MindMap } from "~/components/mindmap";
 import { useUser } from "~/hooks/useUser";
-import { makeClient } from "~/lib/client";
+import { ideaClient } from "~/lib/client";
 import { MindMapState, StyleStrategy } from "~/lib/graph";
 import { Idea, type Nodeable, Notice, type Root } from "~/lib/model";
 import type { Route } from "./+types/mind-map";
 
 export async function clientAction({ request }: Route.ClientActionArgs) {
 	const data = await request.formData();
-	const client = makeClient(new URL(request.url).origin);
 
 	const json = {
 		name: data.get("name")!.toString(),
@@ -31,7 +30,7 @@ export async function clientAction({ request }: Route.ClientActionArgs) {
 			.map(tag => (tag.startsWith("#") ? tag.slice(1) : tag)),
 	};
 
-	const response = await client.idea.index.$post({ json });
+	const response = await ideaClient.index.$post({ json });
 	return [await response.json(), json] as const;
 }
 
@@ -39,7 +38,6 @@ export default function MindMapPage({ actionData }: Route.ComponentProps) {
 	const [selectedItem, setSelectedItem] = useState<Nodeable | null>(null);
 	const [rootItem, setRootItem] = useState<Root>(new Notice("読み込み中..."));
 	const user = useUser();
-	console.log(user);
 
 	const state = useMemo(() => {
 		const state = new MindMapState(
