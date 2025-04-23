@@ -1,10 +1,11 @@
 import { eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/d1";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import { userTable } from "../database/schema";
 import type { Env } from "./index";
 
-export const user = new Hono<Env>();
+export const usersApp = new Hono<Env>();
 
 // ユーザー情報を取得する関数
 async function getUserById(id: string, db: D1Database) {
@@ -36,73 +37,27 @@ async function getUserById(id: string, db: D1Database) {
 	}
 }
 
-// ユーザー詳細取得
-const usersRoute = user
-	.get("/:id", async c => {
-		try {
-			const userId = c.req.param("id");
-			const session = await c.var.auth.getSession();
+const usersRoute = usersApp
+	// ユーザー詳細取得
+	.get("/", async c => {
+		const session = await c.var.auth.assertSession();
+		const user = await getUserById(session.id, c.env.DB);
+		if (!user) throw new HTTPException(404);
 
-			if (!session?.user) {
-				return c.json({ error: "Unauthorized" }, 401);
-			}
-
-			if (session.user.id !== userId) {
-				return c.json({ error: "Forbidden" }, 403);
-			}
-
-			const user = await getUserById(userId, c.env.DB);
-			if (!user) {
-				return c.json({ error: "User not found" }, 404);
-			}
-
-			return c.json(user);
-		} catch (error) {
-			return c.json({ error: "Internal server error" }, 500);
-		}
+		return c.json(user);
 	})
 	// ユーザー情報更新
-	.put("/:id", async c => {
-		try {
-			const userId = c.req.param("id");
-			const session = await c.var.auth.getSession();
+	.put("/", async c => {
+		const session = await c.var.auth.assertSession();
+		const data = await c.req.json();
 
-			if (!session?.user) {
-				return c.json({ error: "Unauthorized" }, 401);
-			}
+		const user = c.var.data.user.getUserById(session.id);
+		if (!user) throw new HTTPException(400);
 
-			if (session.user.id !== userId) {
-				return c.json({ error: "Forbidden" }, 403);
-			}
+		const updatedUser = await c.var.data.user.updateUser(session.id, data);
+		if (!updatedUser) throw new HTTPException(400);
 
-			const data = await c.req.json();
-
-			// ユーザーが存在しない場合は新規作成
-			const existingUser = await getUserById(userId, c.env.DB);
-			if (!existingUser) {
-				const newUser = await c.var.data.user.createOrUpdateUser({
-					id: userId,
-					name: session.user.name || "",
-					email: session.user.email || "",
-					image: session.user.image || "",
-					description: data.description || "",
-				});
-				if (!newUser) {
-					return c.json({ error: "Failed to create user" }, 500);
-				}
-				return c.json(newUser);
-			}
-
-			const updatedUser = await c.var.data.user.updateUser(userId, data);
-			if (!updatedUser) {
-				return c.json({ error: "User not found" }, 404);
-			}
-
-			return c.json(updatedUser);
-		} catch (error) {
-			console.error("Error in PUT /users/:id:", error);
-			return c.json({ error: "Internal server error" }, 500);
-		}
+		return c.json(updatedUser);
 	});
 
 export type UsersRoute = typeof usersRoute;

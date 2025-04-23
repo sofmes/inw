@@ -28,6 +28,7 @@ export const useUser = () => {
 
 			try {
 				const response = await fetch(`/api/users/${session.user.id}`);
+				console.log(response);
 				if (!response.ok) {
 					throw new Error("Failed to fetch user data");
 				}

@@ -3,9 +3,9 @@ import { Hono } from "hono";
 import { z } from "zod";
 import type { Env } from ".";
 
-export const tag = new Hono<Env>();
+export const tagApp = new Hono<Env>();
 
-const route = tag
+const route = tagApp
 	.get(
 		"/",
 		zValidator("query", z.object({ page: z.string().transform(Number) })),

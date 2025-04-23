@@ -39,6 +39,7 @@ export default function MindMapPage({ actionData }: Route.ComponentProps) {
 	const [selectedItem, setSelectedItem] = useState<Nodeable | null>(null);
 	const [rootItem, setRootItem] = useState<Root>(new Notice("読み込み中..."));
 	const user = useUser();
+	console.log(user);
 
 	const state = useMemo(() => {
 		const state = new MindMapState(

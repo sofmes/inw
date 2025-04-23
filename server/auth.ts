@@ -31,9 +31,9 @@ type Env = {
 	};
 };
 
-export const auth = new Hono<Env>();
+export const authApp = new Hono<Env>();
 
-auth.all("/*", async c => {
+authApp.all("/*", async c => {
 	const db = drizzle(c.env.DB, { schema }) as Database;
 	const userData = new UserDataManager(db);
 

@@ -1,11 +1,12 @@
 import { zValidator } from "@hono/zod-validator";
 import { Hono } from "hono";
+import { HTTPException } from "hono/http-exception";
 import { z } from "zod";
 import type { Env } from ".";
 
-export const idea = new Hono<Env>();
+export const ideaApp = new Hono<Env>();
 
-const route = idea
+const route = ideaApp
 	.get(
 		"/",
 		zValidator(
@@ -51,6 +52,7 @@ const route = idea
 			}),
 		),
 		async c => {
+			await c.var.auth.assertSession();
 			const data = c.req.valid("json");
 			const result = await c.var.data.idea.set(data);
 
@@ -66,9 +68,14 @@ const route = idea
 			}),
 		),
 		async c => {
+			const session = await c.var.auth.assertSession();
 			const { id } = c.req.valid("param");
-			const result = await c.var.data.idea.delete(id);
-			if (!result) return c.status(404);
+
+			const idea = await c.var.data.idea.get(id);
+			if (!idea) throw new HTTPException(404);
+			if (idea.author.id !== session.id) throw new HTTPException(403);
+
+			await c.var.data.idea.delete(id);
 
 			return c.body(null);
 		},
