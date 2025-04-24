@@ -64,7 +64,9 @@ export const AccountMenu = () => {
 									プロフィール
 								</button>
 							</li>
-							<li>
+							<li hidden
+								// まだ作られてない機能なので、非表示。
+							>
 								<button
 									className="py-2 px-4 hover:bg-neutral-600 rounded-lg w-full text-left"
 									onClick={() => setIsOpen(false)}
