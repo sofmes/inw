@@ -46,22 +46,17 @@ function GraphEvents({ state, onSelect }: GraphEventsProps) {
 	useEffect(() => {
 		registerEvents({
 			clickStage: _ => onSelect(null),
-			doubleClickNode: payload => {
+			doubleClickNode: payload => {},
+			clickNode: payload => {
 				const tag = state.objs.getTag(payload.node);
 				if (tag) {
-					onSelect(tag);
+					expandTag(state, tag);
 					return;
 				}
 
 				const idea = state.objs.getIdea(payload.node);
 				if (idea) {
 					onSelect(idea);
-				}
-			},
-			clickNode: payload => {
-				const tag = state.objs.getTag(payload.node);
-				if (tag) {
-					expandTag(state, tag);
 				}
 
 				const trigger = state.objs.getTrigger(payload.node);
