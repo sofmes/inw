@@ -11,7 +11,7 @@ export const Header = () => {
 					alt="アイディアネットワーク"
 				/>
 				<h1 className="text-lg inline-block text-white">
-					アイディアネットワーク
+					アイディアネットワーク（プレビュー）
 				</h1>
 			</div>
 
