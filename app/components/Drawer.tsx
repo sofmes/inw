@@ -48,6 +48,8 @@ export function Drawer() {
 								</div>
 							</div>
 							<button
+								hidden
+								// ↑現在はまだ実装されていないプロジェクト機能のものなので非表示
 								className="absolute bottom-7 right-7 px-6 py-2 rounded-lg
 										bg-[rgb(84,84,84)] hover:bg-[rgb(100,100,100)]
 										transition-colors duration-200"
