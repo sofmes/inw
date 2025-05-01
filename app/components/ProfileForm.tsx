@@ -83,14 +83,16 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
         transition-opacity duration-300 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
 		>
 			<Form
-				className={`bg-neutral-800 text-white p-8 rounded-2xl shadow-lg w-[600px]
+				className={`bg-neutral-800 text-white p-4 sm:p-8 rounded-2xl shadow-lg w-[95%] sm:w-[600px] max-h-[90vh] overflow-y-auto
                             transform transition-transform duration-300 ${isOpen ? "scale-100" : "scale-90 opacity-0"}`}
 				onSubmit={handleSubmit}
 			>
-				<h2 className="text-2xl font-bold mb-6">プロフィール設定</h2>
+				<h2 className="text-xl sm:text-2xl font-bold mb-4 sm:mb-6">
+					プロフィール設定
+				</h2>
 
-				<div className="flex items-center gap-4 mb-6">
-					<div className="w-16 h-16 rounded-full overflow-hidden">
+				<div className="flex items-center gap-3 sm:gap-4 mb-4 sm:mb-6">
+					<div className="w-12 h-12 sm:w-16 sm:h-16 rounded-full overflow-hidden">
 						<img
 							src={userData?.image || session.user.image || ""}
 							alt={
@@ -111,7 +113,10 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
 					</div>
 				</div>
 
-				<label htmlFor="description" className="block text-lg mb-2">
+				<label
+					htmlFor="description"
+					className="block text-base sm:text-lg mb-2"
+				>
 					自己紹介
 				</label>
 				<textarea
@@ -120,22 +125,22 @@ export const ProfileForm: React.FC<ProfileFormProps> = ({
 					defaultValue={
 						userData?.description || session.user.description || ""
 					}
-					className="w-full p-2 bg-neutral-700 rounded-lg mb-6 text-lg"
-					rows={8}
+					className="w-full p-2 bg-neutral-700 rounded-lg mb-4 sm:mb-6 text-base sm:text-lg"
+					rows={6}
 					placeholder="自己紹介を入力してください"
 				/>
 
-				<div className="flex justify-end gap-4">
+				<div className="flex justify-end gap-3 sm:gap-4">
 					<button
 						type="button"
 						onClick={onClose}
-						className="bg-gray-600 px-6 py-2 rounded-lg text-lg hover:bg-gray-500 transition"
+						className="bg-gray-600 px-4 sm:px-6 py-2 rounded-lg text-base sm:text-lg hover:bg-gray-500 transition"
 					>
 						キャンセル
 					</button>
 					<button
 						type="submit"
-						className="bg-blue-500 px-6 py-2 rounded-lg text-lg hover:bg-blue-400 transition"
+						className="bg-blue-500 px-4 sm:px-6 py-2 rounded-lg text-base sm:text-lg hover:bg-blue-400 transition"
 					>
 						保存
 					</button>
