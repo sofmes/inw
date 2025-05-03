@@ -12,10 +12,6 @@ database_id = "007cf749-c9d3-4080-b9f4-c2caf2e63987"
 migrations_dir = "drizzle"
 
 [[kv_namespaces]]
-binding = "tag"
-id = "60ff98b8286446c8af32336399505efd"
-
-[[kv_namespaces]]
 binding = "tag_name"
 id = "8b90656b4c8c45b9a5f5ed895df5e1e7"
 
