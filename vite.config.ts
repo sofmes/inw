@@ -8,13 +8,6 @@ import tsconfigPaths from "vite-tsconfig-paths";
 import { getLoadContext } from "./load-context";
 
 export default defineConfig(({ isSsrBuild }) => ({
-	build: {
-		rollupOptions: isSsrBuild
-			? {
-					input: "./workers/app.ts",
-				}
-			: undefined,
-	},
 	ssr: {
 		target: "webworker",
 		noExternal: true,
