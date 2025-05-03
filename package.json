@@ -2,6 +2,7 @@
 	"name": "inw",
 	"private": true,
 	"type": "module",
+	"packageManager": "pnpm@10.10.0",
 	"scripts": {
 		"build": "react-router build",
 		"db:generate": "dotenv -- drizzle-kit generate",
