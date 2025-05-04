@@ -2,7 +2,7 @@ workers_dev = true
 name = "inw"
 compatibility_date = "2025-03-11"
 compatibility_flags = ["nodejs_compat"]
-main = "./worker.ts"
+main = "./server/index.ts"
 assets = { directory = "./build/client/" }
 
 [[d1_databases]]
