@@ -41,8 +41,6 @@ export default function Home() {
 
 	useEffect(() => {
 		(async () => {
-			const data = await getData(new URL(location.href), page.toString());
-			addTags(data.tags);
 		})();
 	}, [page]);
 
@@ -55,10 +53,19 @@ export default function Home() {
 
 	useEffect(() => {
 		const triggerHandler = async () => {
-			setPage(page + 1);
+			const data = await getData(new URL(location.href), page.toString());
+
+			if (data.tags.length) {
+				addTags(data.tags);
+				setPage(page + 1);
+			} else {
+				alert("これ以上タグは存在しません。")
+			}
 		};
 
 		loadTagsTrigger.onClick = triggerHandler;
+	
+		if (page === 1) triggerHandler();
 	}, [page]);
 
 	return <></>;
