@@ -30,13 +30,22 @@ interface GraphEventsProps {
 
 async function expandTag(state: MindMapState, tag: Tag) {
 	const response = await ideaClient.index.$get({
-		query: { tagId: tag.id.toString(), page: (++tag.page).toString() },
+		query: { tagId: tag.id.toString(), page: (tag.page + 1).toString() },
 	});
-	const data = await response.json();
+	const raw = await response.json();
+	if (!raw.length) return alert("これ以上、アイデアは存在しません。");
+	
+	tag.page += 1;
+	
+	const data = raw
+		.map(raw => Idea.fromData(raw))
+		.filter(idea => !state.objs.getIdea(idea.node));
+	// もし読み込んだタグが全て被ったなら、もう一回読み込む。
+	if (!data.length) return await expandTag(state, tag);
 
 	state.expandWithIdeas(
 		tag,
-		data.map(raw => Idea.fromData(raw)),
+		data
 	);
 }
 

@@ -18,7 +18,7 @@ const route = ideaApp
 		),
 		async c => {
 			const { tagId, page } = c.req.valid("query");
-			const data = await c.var.data.idea.getByTag(tagId, page, 1);
+			const data = await c.var.data.idea.getByTag(tagId, page, 10);
 
 			return c.json(data);
 		},
